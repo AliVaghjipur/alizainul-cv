@@ -7,6 +7,8 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <!-- particles.js CDN for dynamic background -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         body {
             font-family: 'Fira Code', monospace; /* Programming-friendly font */
@@ -35,12 +37,12 @@
             background: #718096;
         }
 
-        /* Typewriter effect */
+        /* Typewriter effect for h1 in .typewriter */
         .typewriter h1 {
             overflow: hidden; /* Ensures the content is not revealed until the animation */
-            border-right: .15em solid orange; /* The typwriter cursor */
+            border-right: .15em solid #fbbf24; /* The typewriter cursor - changed to orange-400 */
             white-space: nowrap; /* Keeps the content on a single line */
-            margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+            margin: 0 auto;
             letter-spacing: .05em; /* Adjust as needed */
             animation:
                 typing 3.5s forwards,
@@ -57,16 +59,7 @@
         /* The typewriter cursor effect */
         @keyframes blink-caret {
             from, to { border-color: transparent }
-            50% { border-color: orange }
-        }
-
-        /* Skill bar animation */
-        .skill-bar-inner {
-            width: 0;
-            animation: fillBar 1s ease-out forwards;
-        }
-        @keyframes fillBar {
-            to { width: var(--skill-width); }
+            50% { border-color: #fbbf24 } /* Blink color matching accent */
         }
 
         /* Simple fade-in for sections */
@@ -84,9 +77,32 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Particles background styling */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #1a202c; /* Ensure it matches body background */
+            z-index: -1; /* Send it to the back */
+            top: 0;
+            left: 0;
+        }
+
+        /* Hover effect for skill items */
+        .skill-item-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .skill-item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
 
     <!-- Navbar for navigation -->
     <nav class="sticky top-0 z-50 bg-gray-800 bg-opacity-95 shadow-lg py-4">
@@ -104,30 +120,31 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container relative z-10"> <!-- Content needs higher z-index than particles -->
         <!-- Home Section -->
         <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center py-16">
-            <div class="w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-orange-500 shadow-xl">
-                <!-- Placeholder image for profile picture -->
-                <img src="https://placehold.co/128x128/333/FFF?text=AV" alt="Profile Picture" class="w-full h-full object-cover">
+            <div class="w-40 h-40 mb-6 rounded-full overflow-hidden border-4 border-orange-500 shadow-xl transform transition-transform duration-300 hover:scale-105">
+                <!-- IMPORTANT: Replace this placeholder with your actual profile picture URL -->
+                <!-- Example: <img src="https://yourdomain.com/your-picture.jpg" alt="Profile Picture" class="w-full h-full object-cover"> -->
+                <img src="https://placehold.co/160x160/333/FFF?text=AV" alt="Profile Picture" class="w-full h-full object-cover">
             </div>
             <h1 class="text-5xl sm:text-6xl font-extrabold text-white mb-4 typewriter">Alizainul Vaghjipurwala, M.Sc.</h1>
             <p class="text-3xl sm:text-4xl text-orange-400 font-light mb-8">Mechatronics Engineer</p>
             <div class="flex flex-wrap justify-center space-x-6 text-xl sm:text-2xl">
-                <a href="https://github.com/AliVaghjipur" target="_blank" class="hover:text-orange-400 transition duration-300 flex items-center">
-                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.09.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.909-.62.068-.608.068-.608 1.007.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.088 2.91.829.091-.645.356-1.088.654-1.336-2.22-.253-4.555-1.119-4.555-4.935 0-1.092.39-1.983 1.029-2.682-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.022A9.284 9.284 0 0112 6.865c.85.004 1.705.115 2.504.337 1.909-1.292 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.65.64.699 1.029 1.59 1.029 2.682 0 3.823-2.339 4.681-4.566 4.925.359.309.678.92.678 1.855 0 1.336-.012 2.419-.012 2.747 0 .268.18.577.688.481C21.137 20.28 24 16.527 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
+                <a href="https://github.com/AliVaghjipur" target="_blank" class="hover:text-orange-400 transition duration-300 flex items-center transform hover:scale-105">
+                    <svg class="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.09.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.909-.62.068-.608.068-.608 1.007.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.088 2.91.829.091-.645.356-1.088.654-1.336-2.22-.253-4.555-1.119-4.555-4.935 0-1.092.39-1.983 1.029-2.682-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.022A9.284 9.284 0 0112 6.865c.85.004 1.705.115 2.504.337 1.909-1.292 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.65.64.699 1.029 1.59 1.029 2.682 0 3.823-2.339 4.681-4.566 4.925.359.309.678.92.678 1.855 0 1.336-.012 2.419-.012 2.747 0 .268.18.577.688.481C21.137 20.28 24 16.527 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
                     GitHub
                 </a>
-                <a href="https://linkedin.com/in/AlizainulVaghjipurwala" target="_blank" class="hover:text-orange-400 transition duration-300 flex items-center">
-                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.518V14.77c0-1.28-.46-2.15-1.61-2.15-.878 0-1.4.593-1.63 1.16-.07.2-.064.44-.064.686v5.986H9.72c.047-9.52 0-10.452 0-10.452h3.518v1.49h.05c.48-.737 1.29-1.63 2.87-1.63 2.09 0 3.65 1.37 3.65 4.31v6.282zM6.67 8.35c-1.15 0-1.92-.76-1.92-1.706C4.75 5.618 5.52 4.86 6.67 4.86c1.16 0 1.92.758 1.92 1.704 0 1.01-.76 1.78-1.92 1.78zm1.75 12.102H4.92V10.002h3.504v10.45zM22.25 0H1.75C.78 0 0 .778 0 1.75v20.5C0 23.222.78 24 1.75 24h20.5c.97 0 1.75-.778 1.75-1.75V1.75C24 .778 23.22 0 22.25 0z"/></svg>
+                <a href="https://linkedin.com/in/AlizainulVaghjipurwala" target="_blank" class="hover:text-orange-400 transition duration-300 flex items-center transform hover:scale-105">
+                    <svg class="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.518V14.77c0-1.28-.46-2.15-1.61-2.15-.878 0-1.4.593-1.63 1.16-.07.2-.064.44-.064.686v5.986H9.72c.047-9.52 0-10.452 0-10.452h3.518v1.49h.05c.48-.737 1.29-1.63 2.87-1.63 2.09 0 3.65 1.37 3.65 4.31v6.282zM6.67 8.35c-1.15 0-1.92-.76-1.92-1.706C4.75 5.618 5.52 4.86 6.67 4.86c1.16 0 1.92.758 1.92 1.704 0 1.01-.76 1.78-1.92 1.78zm1.75 12.102H4.92V10.002h3.504v10.45zM22.25 0H1.75C.78 0 0 .778 0 1.75v20.5C0 23.222.78 24 1.75 24h20.5c.97 0 1.75-.778 1.75-1.75V1.75C24 .778 23.22 0 22.25 0z"/></svg>
                     LinkedIn
                 </a>
-                <a href="mailto:valizainul@gmail.com" class="hover:text-orange-400 transition duration-300 flex items-center">
-                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884l8.995 5.996L2.003 17.876V5.884zM22 5.884v11.992L13.002 11.88zM12 13.996L2.003 7.884 12 2l9.997 5.884L12 13.996z"/></svg>
+                <a href="mailto:valizainul@gmail.com" class="hover:text-orange-400 transition duration-300 flex items-center transform hover:scale-105">
+                    <svg class="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884l8.995 5.996L2.003 17.876V5.884zM22 5.884v11.992L13.002 11.88zM12 13.996L2.003 7.884 12 2l9.997 5.884L12 13.996z"/></svg>
                     Email
                 </a>
-                <a href="tel:+4915751881840" class="hover:text-orange-400 transition duration-300 flex items-center">
-                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg>
+                <a href="tel:+4915751881840" class="hover:text-orange-400 transition duration-300 flex items-center transform hover:scale-105">
+                    <svg class="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg>
                     Phone
                 </a>
             </div>
@@ -136,7 +153,7 @@
         <!-- Summary Section -->
         <section id="summary" class="py-16 fade-in-section">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Summary</h2>
-            <p class="text-lg leading-relaxed bg-gray-800 p-6 rounded-lg shadow-md">
+            <p class="text-lg leading-relaxed bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
                 AI/ML engineer with a strong foundation in Deep Learning, Computer Vision, Sensor Fusion and Generative AI. Experienced in developing Autonomous
                 Driving Functions for Localization, Perception and Trajectory planning of vehicles. Proficient in building and deploying scalable machine learning solutions
                 using modern frameworks such as PyTorch, TensorFlow, and OpenCV. Solid understanding of 2D/3D perception, sensor data processing, state estimation
@@ -148,7 +165,7 @@
         <section id="experience" class="py-16 fade-in-section">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Work Experience</h2>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Research Engineer (Master Thesis)</h3>
                 <p class="text-orange-300">Hella Forvia GmbH | Lippstadt, Germany</p>
                 <p class="text-gray-400 mb-4">Feb 2024 - Aug 2024</p>
@@ -160,7 +177,7 @@
                 </ul>
             </div>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Engineering Intern</h3>
                 <p class="text-orange-300">Hella Forvia GmbH | Lippstadt, Germany</p>
                 <p class="text-gray-400 mb-4">Aug 2023 - Feb 2024</p>
@@ -172,7 +189,7 @@
                 </ul>
             </div>
 
-            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Graduate Engineer Trainee</h3>
                 <p class="text-orange-300">Sodecia India Pvt. Ltd. | Halol, Gujarat, India</p>
                 <p class="text-gray-400 mb-4">Jul 2019 - Oct 2019</p>
@@ -186,98 +203,135 @@
         <section id="skills" class="py-16 fade-in-section">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Skills & Expertise</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 <!-- Programming Languages -->
-                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
-                    <h3 class="text-2xl font-semibold text-white mb-4">Programming Languages</h3>
-                    <div class="space-y-4">
-                        <div class="skill-item">
-                            <p>Python</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 95%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>Matlab/Simulink</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 85%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>C++</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 75%;"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🐍</span> <!-- Python emoji -->
+                    <p class="text-lg text-white">Python</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🔢</span> <!-- Matlab/Simulink emoji -->
+                    <p class="text-lg text-white">Matlab/Simulink</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">➕</span> <!-- C++ emoji -->
+                    <p class="text-lg text-white">C++</p>
                 </div>
 
                 <!-- Libraries & Frameworks -->
-                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
-                    <h3 class="text-2xl font-semibold text-white mb-4">Libraries & Frameworks</h3>
-                    <div class="space-y-4">
-                        <div class="skill-item">
-                            <p>PyTorch</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 90%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>TensorFlow</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 88%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>OpenCV</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 92%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>Scikit-learn</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 80%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>Numpy, Pandas, Matplotlib</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 90%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <p>PCL, Keras, ROS, GIT, AWS, MLOps, Docker</p>
-                            <div class="w-full bg-gray-700 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 85%;"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🔥</span> <!-- PyTorch emoji -->
+                    <p class="text-lg text-white">PyTorch</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🧠</span> <!-- TensorFlow emoji -->
+                    <p class="text-lg text-white">TensorFlow</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">👁️</span> <!-- OpenCV emoji -->
+                    <p class="text-lg text-white">OpenCV</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🧪</span> <!-- Scikit-learn emoji -->
+                    <p class="text-lg text-white">Scikit-learn</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">📊</span> <!-- Numpy, Pandas, Matplotlib emoji -->
+                    <p class="text-lg text-white">Numpy, Pandas, Matplotlib</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">☁️</span> <!-- AWS emoji -->
+                    <p class="text-lg text-white">AWS</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🐳</span> <!-- Docker emoji -->
+                    <p class="text-lg text-white">Docker</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🐙</span> <!-- GIT emoji -->
+                    <p class="text-lg text-white">GIT</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">⚙️</span> <!-- MLOps emoji -->
+                    <p class="text-lg text-white">MLOps</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🤖</span> <!-- ROS emoji -->
+                    <p class="text-lg text-white">ROS</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">✨</span> <!-- Keras emoji -->
+                    <p class="text-lg text-white">Keras</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">💡</span> <!-- PCL emoji -->
+                    <p class="text-lg text-white">PCL</p>
                 </div>
 
                 <!-- Core Expertise -->
-                <div class="p-6 bg-gray-800 rounded-lg shadow-md col-span-1 md:col-span-2">
-                    <h3 class="text-2xl font-semibold text-white mb-4">Core Expertise</h3>
-                    <ul class="list-disc pl-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 text-gray-300">
-                        <li>Artificial Intelligence</li>
-                        <li>Machine Learning</li>
-                        <li>Deep Learning</li>
-                        <li>Computer Vision</li>
-                        <li>Large Language Models (LLMs)</li>
-                        <li>Natural Language Processing (NLP)</li>
-                        <li>GAN, VAE</li>
-                        <li>ML Pipeline Design</li>
-                        <li>Data Architecture</li>
-                        <li>Model Deployment</li>
-                        <li>Cloud Platforms (AWS)</li>
-                        <li>CI/CD, MLOps, DevOps</li>
-                        <li>Analytical Thinking</li>
-                        <li>Communication</li>
-                        <li>Presentation</li>
-                        <li>Teamwork</li>
-                        <li>Curiosity</li>
-                        <li>Quick Learner</li>
-                    </ul>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">💡</span> <!-- AI emoji -->
+                    <p class="text-lg text-white">AI</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🧠</span> <!-- ML emoji -->
+                    <p class="text-lg text-white">Machine Learning</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🌌</span> <!-- DL emoji -->
+                    <p class="text-lg text-white">Deep Learning</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">👀</span> <!-- CV emoji -->
+                    <p class="text-lg text-white">Computer Vision</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🗣️</span> <!-- LLMs emoji -->
+                    <p class="text-lg text-white">LLMs & NLP</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🎨</span> <!-- GAN, VAE emoji -->
+                    <p class="text-lg text-white">GAN, VAE</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🏗️</span> <!-- ML Pipeline Design emoji -->
+                    <p class="text-lg text-white">ML Pipeline Design</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🗄️</span> <!-- Data Architecture emoji -->
+                    <p class="text-lg text-white">Data Architecture</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🚀</span> <!-- Model Deployment emoji -->
+                    <p class="text-lg text-white">Model Deployment</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🔁</span> <!-- CI/CD, DevOps emoji -->
+                    <p class="text-lg text-white">CI/CD, DevOps</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🤔</span> <!-- Analytical Thinking emoji -->
+                    <p class="text-lg text-white">Analytical Thinking</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">💬</span> <!-- Communication emoji -->
+                    <p class="text-lg text-white">Communication</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🎤</span> <!-- Presentation emoji -->
+                    <p class="text-lg text-white">Presentation</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🤝</span> <!-- Teamwork emoji -->
+                    <p class="text-lg text-white">Teamwork</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">🧐</span> <!-- Curiosity emoji -->
+                    <p class="text-lg text-white">Curiosity</p>
+                </div>
+                <div class="skill-item-card p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 text-center flex flex-col items-center justify-center">
+                    <span class="text-4xl mb-2">⚡</span> <!-- Quick Learner emoji -->
+                    <p class="text-lg text-white">Quick Learner</p>
                 </div>
             </div>
         </section>
@@ -288,16 +342,16 @@
 
             <!-- Project Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <button class="project-filter-btn px-6 py-2 rounded-full bg-orange-600 hover:bg-orange-700 text-white font-semibold transition duration-300" data-filter="all">All</button>
-                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="ml-dl">ML/DL</button>
-                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="cv">Computer Vision</button>
-                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="gen-ai">Generative AI</button>
-                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="web-dev">Web Dev/Deployment</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-orange-600 hover:bg-orange-700 text-white font-semibold transition duration-300 transform hover:scale-105" data-filter="all">All</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300 transform hover:scale-105" data-filter="ml-dl">ML/DL</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300 transform hover:scale-105" data-filter="cv">Computer Vision</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300 transform hover:scale-105" data-filter="gen-ai">Generative AI</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300 transform hover:scale-105" data-filter="web-dev">Web Dev/Deployment</button>
             </div>
 
             <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Project 1: LiDAR-Camera Fusion for 3D Object Detection -->
-                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl cv">
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 hover:shadow-xl transition duration-300 transform hover:scale-[1.01]" data-categories="ml-dl cv">
                     <h3 class="text-2xl font-semibold text-white mb-3">LiDAR-Camera Fusion for 3D Object Detection</h3>
                     <p class="text-gray-300 mb-4">Implemented state-of-the-art sensor fusion pipeline using KITTI dataset, achieving 89% detection accuracy. Integrated YOLOv5 with point cloud processing for robust 3D object detection and tracking. Developed custom data preprocessing pipeline handling multi-sensor synchronization.</p>
                     <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
@@ -307,7 +361,7 @@
                 </div>
 
                 <!-- Project 2: Stable Diffusion model from scratch -->
-                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl gen-ai">
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 hover:shadow-xl transition duration-300 transform hover:scale-[1.01]" data-categories="ml-dl gen-ai">
                     <h3 class="text-2xl font-semibold text-white mb-3">Stable Diffusion model from scratch</h3>
                     <p class="text-gray-300 mb-4">Built a Stable Diffusion model from scratch using PyTorch, building a complete text-to-image and image-to-image generation pipeline, gaining deep insights into generative AI models. Developed all components like the Variational Autoencoder (VAE) for latent encoding, a transformer-based text encoder and a U-Net with attention for denoising, CLIP and DDPM scheduler, developing complete end-to-end generative AI model.</p>
                     <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
@@ -317,7 +371,7 @@
                 </div>
 
                 <!-- Project 3: Boston Housing Price prediction (model + deployment) -->
-                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl web-dev">
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 hover:shadow-xl transition duration-300 transform hover:scale-[1.01]" data-categories="ml-dl web-dev">
                     <h3 class="text-2xl font-semibold text-white mb-3">Boston Housing Price prediction (model + deployment)</h3>
                     <p class="text-gray-300 mb-4">Developed and deployed a Boston Housing Price Prediction web app using Flask, HTML, and Postman for API testing, serving a pickled Linear Regression model. Containerized the application with Docker and automated deployment using GitHub Actions and Render/Heroku, ensuring seamless CI/CD. Built and trained the model on the Boston Housing dataset, implementing data preprocessing, feature engineering, and model serialization for production readiness.</p>
                     <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
@@ -327,7 +381,7 @@
                 </div>
 
                 <!-- Project 4: Autonomous Vehicle Behavioral Cloning -->
-                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl cv">
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 hover:shadow-xl transition duration-300 transform hover:scale-[1.01]" data-categories="ml-dl cv">
                     <h3 class="text-2xl font-semibold text-white mb-3">Autonomous Vehicle Behavioral Cloning</h3>
                     <p class="text-gray-300 mb-4">Developed end-to-end deep learning system for autonomous vehicle control using behavioral cloning. Implemented data augmentation pipeline improving model generalization by around 35%. Achieved 97% successful autonomous navigation in various weather and lighting conditions.</p>
                     <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
@@ -337,7 +391,7 @@
                 </div>
 
                 <!-- Project 5: Advanced Lane Detection -->
-                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="cv">
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 hover:shadow-xl transition duration-300 transform hover:scale-[1.01]" data-categories="cv">
                     <h3 class="text-2xl font-semibold text-white mb-3">Advanced Lane Detection</h3>
                     <p class="text-gray-300 mb-4">Applied Sobel and color thresholding with CLAHE for robust feature extraction under varying lighting. Implemented sliding window and memory-based lane tracking for frame-to-frame stability. Estimated lane curvature and vehicle offset in real-world units; overlayed results on video frames. Enhanced robustness with ROI masking and temporal smoothing for challenging environments (e.g., shadows, glare, tight curves).</p>
                     <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
@@ -352,7 +406,7 @@
         <section id="education" class="py-16 fade-in-section">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Education</h2>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">M.Sc. Mechanical Engineering ISE (Mechatronics Profile)</h3>
                 <p class="text-orange-300">Universität Duisburg Essen | Duisburg, Germany</p>
                 <p class="text-gray-400 mb-4">Oct 2021 - Aug 2024 | GPA: 1.9</p>
@@ -364,7 +418,7 @@
                 </ul>
             </div>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">B.E. Mechanical Engineering</h3>
                 <p class="text-orange-300">Gujarat Technological University | Gujarat, India</p>
                 <p class="text-gray-400 mb-4">Sep 2015 - Jun 2019</p>
@@ -373,7 +427,7 @@
                 </ul>
             </div>
 
-            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Highschool (Qualification for University Education)</h3>
                 <p class="text-orange-300">Calorx Public School | Godhra, India</p>
                 <p class="text-gray-400 mb-4">Jul 2013 - Mar 2015</p>
@@ -384,7 +438,7 @@
         <section id="certifications" class="py-16 fade-in-section">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Certifications & Courses</h2>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">The Complete Self Driving Car Course - Applied Deep Learning</h3>
                 <p class="text-orange-300">UDEMY</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -392,7 +446,7 @@
                 </ul>
             </div>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">AWS Machine Learning Foundations</h3>
                 <p class="text-orange-300">UDACITY</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -400,7 +454,7 @@
                 </ul>
             </div>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Deep Learning with MATLAB</h3>
                 <p class="text-orange-300">Mathworks MATLAB</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -408,7 +462,7 @@
                 </ul>
             </div>
 
-            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Reinforcement Learning with MATLAB</h3>
                 <p class="text-orange-300">Mathworks MATLAB</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -422,7 +476,7 @@
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Languages & Interests</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                     <h3 class="text-2xl font-semibold text-white mb-4">Languages</h3>
                     <ul class="list-disc pl-5 space-y-2 text-gray-300">
                         <li>German - Upper Intermediate (B2)</li>
@@ -430,7 +484,7 @@
                         <li>Hindi - Native</li>
                     </ul>
                 </div>
-                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                     <h3 class="text-2xl font-semibold text-white mb-4">Hobbies and Interests</h3>
                     <ul class="list-disc pl-5 space-y-2 text-gray-300">
                         <li>AI</li>
@@ -447,7 +501,7 @@
         <section id="volunteering" class="py-16 fade-in-section">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Volunteering</h2>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Social worker, Head coordinator</h3>
                 <p class="text-orange-300">National Service Scheme (NSS), India</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -456,7 +510,7 @@
                 </ul>
             </div>
 
-            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Volunteer</h3>
                 <p class="text-orange-300">Share A Book India Association (SABIA), India</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -464,7 +518,7 @@
                 </ul>
             </div>
 
-            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 transform transition-transform duration-300 hover:scale-[1.01]">
                 <h3 class="text-2xl font-semibold text-white mb-2">Volunteer</h3>
                 <p class="text-orange-300">Campus Garten, Germany</p>
                 <ul class="list-disc pl-5 space-y-2 text-gray-300">
@@ -477,24 +531,24 @@
         <section id="contact" class="py-16 fade-in-section text-center">
             <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2 inline-block">Get in Touch</h2>
             <div class="mt-8 text-xl space-y-4">
-                <p class="flex items-center justify-center"><svg class="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884l8.995 5.996L2.003 17.876V5.884zM22 5.884v11.992L13.002 11.88zM12 13.996L2.003 7.884 12 2l9.997 5.884L12 13.996z"/></svg> valizainul@gmail.com</p>
-                <p class="flex items-center justify-center"><svg class="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg> +4915751881840</p>
-                <p class="flex items-center justify-center"><svg class="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg> Pestalozzistraße 8, 70563 Stuttgart, Germany</p>
+                <p class="flex items-center justify-center"><svg class="w-7 h-7 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884l8.995 5.996L2.003 17.876V5.884zM22 5.884v11.992L13.002 11.88zM12 13.996L2.003 7.884 12 2l9.997 5.884L12 13.996z"/></svg> valizainul@gmail.com</p>
+                <p class="flex items-center justify-center"><svg class="w-7 h-7 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg> +4915751881840</p>
+                <p class="flex items-center justify-center"><svg class="w-7 h-7 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg> Pestalozzistraße 8, 70563 Stuttgart, Germany</p>
             </div>
             <div class="flex justify-center space-x-6 mt-8">
-                <a href="https://github.com/AliVaghjipur" target="_blank" class="text-gray-400 hover:text-orange-400 transition duration-300">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.09.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.909-.62.068-.608.068-.608 1.007.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.088 2.91.829.091-.645.356-1.088.654-1.336-2.22-.253-4.555-1.119-4.555-4.935 0-1.092.39-1.983 1.029-2.682-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.022A9.284 9.284 0 0112 6.865c.85.004 1.705.115 2.504.337 1.909-1.292 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.65.64.699 1.029 1.59 1.029 2.682 0 3.823-2.339 4.681-4.566 4.925.359.309.678.92.678 1.855 0 1.336-.012 2.419-.012 2.747 0 .268.18.577.688.481C21.137 20.28 24 16.527 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
+                <a href="https://github.com/AliVaghjipur" target="_blank" class="text-gray-400 hover:text-orange-400 transition duration-300 transform hover:scale-110">
+                    <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.09.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.909-.62.068-.608.068-.608 1.007.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.088 2.91.829.091-.645.356-1.088.654-1.336-2.22-.253-4.555-1.119-4.555-4.935 0-1.092.39-1.983 1.029-2.682-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.022A9.284 9.284 0 0112 6.865c.85.004 1.705.115 2.504.337 1.909-1.292 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.65.64.699 1.029 1.59 1.029 2.682 0 3.823-2.339 4.681-4.566 4.925.359.309.678.92.678 1.855 0 1.336-.012 2.419-.012 2.747 0 .268.18.577.688.481C21.137 20.28 24 16.527 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
                 </a>
-                <a href="https://linkedin.com/in/AlizainulVaghjipurwala" target="_blank" class="text-gray-400 hover:text-orange-400 transition duration-300">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.518V14.77c0-1.28-.46-2.15-1.61-2.15-.878 0-1.4.593-1.63 1.16-.07.2-.064.44-.064.686v5.986H9.72c.047-9.52 0-10.452 0-10.452h3.518v1.49h.05c.48-.737 1.29-1.63 2.87-1.63 2.09 0 3.65 1.37 3.65 4.31v6.282zM6.67 8.35c-1.15 0-1.92-.76-1.92-1.706C4.75 5.618 5.52 4.86 6.67 4.86c1.16 0 1.92.758 1.92 1.704 0 1.01-.76 1.78-1.92 1.78zm1.75 12.102H4.92V10.002h3.504v10.45zM22.25 0H1.75C.78 0 0 .778 0 1.75v20.5C0 23.222.78 24 1.75 24h20.5c.97 0 1.75-.778 1.75-1.75V1.75C24 .778 23.22 0 22.25 0z"/></svg>
+                <a href="https://linkedin.com/in/AlizainulVaghjipurwala" target="_blank" class="text-gray-400 hover:text-orange-400 transition duration-300 transform hover:scale-110">
+                    <svg class="w-9 h-9" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.518V14.77c0-1.28-.46-2.15-1.61-2.15-.878 0-1.4.593-1.63 1.16-.07.2-.064.44-.064.686v5.986H9.72c.047-9.52 0-10.452 0-10.452h3.518v1.49h.05c.48-.737 1.29-1.63 2.87-1.63 2.09 0 3.65 1.37 3.65 4.31v6.282zM6.67 8.35c-1.15 0-1.92-.76-1.92-1.706C4.75 5.618 5.52 4.86 6.67 4.86c1.16 0 1.92.758 1.92 1.704 0 1.01-.76 1.78-1.92 1.78zm1.75 12.102H4.92V10.002h3.504v10.45zM22.25 0H1.75C.78 0 0 .778 0 1.75v20.5C0 23.222.78 24 1.75 24h20.5c.97 0 1.75-.778 1.75-1.75V1.75C24 .778 23.22 0 22.25 0z"/></svg>
                 </a>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="py-8 text-center text-gray-500 text-sm">
-            <p>&copy; 2024 Alizainul Vaghjipurwala. All rights reserved.</p>
-            <p>Built with <span class="text-red-500">&hearts;</span> and Tailwind CSS.</p>
+            <p>&copy; 2025 Alizainul Vaghjipurwala. All rights reserved.</p>
+            <p>Built with <span class="text-red-500">&hearts;</span> and Tailwind CSS, and <span class="text-blue-400">particles.js</span>.</p>
         </footer>
     </div>
 
@@ -515,7 +569,9 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); // Stop observing once visible
+                    // Removed unobserve to allow re-triggering if elements are hidden/shown (e.g., project filtering)
+                } else {
+                    entry.target.classList.remove('is-visible'); // Hide when out of view
                 }
             });
         }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
@@ -546,10 +602,12 @@
                     const categories = card.dataset.categories.split(' ');
                     if (filter === 'all' || categories.includes(filter)) {
                         card.style.display = 'block';
-                        card.classList.add('is-visible'); // Trigger fade-in if not already visible
+                        // Re-observe to trigger fade-in if it was previously hidden
+                        sectionObserver.observe(card);
                     } else {
                         card.style.display = 'none';
-                        card.classList.remove('is-visible');
+                        sectionObserver.unobserve(card); // Stop observing when hidden
+                        card.classList.remove('is-visible'); // Ensure it fades out immediately
                     }
                 });
             });
@@ -558,8 +616,119 @@
         // Initialize display of all projects on load
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.project-filter-btn[data-filter="all"]').click();
+            
+            // Initialize particles.js
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#fbbf24" /* Orange accent */
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        },
+                        "image": {
+                            "src": "img/github.svg",
+                            "width": 100,
+                            "height": 100
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#4a5568", /* Darker gray for lines */
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 3,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
         });
     </script>
 </body>
 </html>
-```
