@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alizainul Vaghjipurwala - Mechatronics Engineer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fira Code', monospace; /* Programming-friendly font */
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 90%; /* Fluid width */
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        /* Custom scrollbar for better aesthetics in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+
+        /* Typewriter effect */
+        .typewriter h1 {
+            overflow: hidden; /* Ensures the content is not revealed until the animation */
+            border-right: .15em solid orange; /* The typwriter cursor */
+            white-space: nowrap; /* Keeps the content on a single line */
+            margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+            letter-spacing: .05em; /* Adjust as needed */
+            animation:
+                typing 3.5s forwards,
+                blink-caret .75s step-end infinite;
+            width: 0; /* Start with zero width to hide text */
+        }
+
+        /* The typing animation */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* The typewriter cursor effect */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: orange }
+        }
+
+        /* Skill bar animation */
+        .skill-bar-inner {
+            width: 0;
+            animation: fillBar 1s ease-out forwards;
+        }
+        @keyframes fillBar {
+            to { width: var(--skill-width); }
+        }
+
+        /* Simple fade-in for sections */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation smoothing */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Navbar for navigation -->
+    <nav class="sticky top-0 z-50 bg-gray-800 bg-opacity-95 shadow-lg py-4">
+        <div class="container flex flex-wrap justify-center sm:justify-between items-center text-sm sm:text-base">
+            <a href="#home" class="block py-2 px-3 text-orange-400 font-bold rounded hover:bg-gray-700 transition duration-300">Alizainul V.</a>
+            <div class="flex flex-wrap space-x-4 mt-2 sm:mt-0">
+                <a href="#summary" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Summary</a>
+                <a href="#experience" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Experience</a>
+                <a href="#skills" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Skills</a>
+                <a href="#projects" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Projects</a>
+                <a href="#education" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Education</a>
+                <a href="#volunteering" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Volunteering</a>
+                <a href="#contact" class="block py-2 px-3 rounded hover:bg-gray-700 transition duration-300">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center py-16">
+            <div class="w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-orange-500 shadow-xl">
+                <!-- Placeholder image for profile picture -->
+                <img src="https://placehold.co/128x128/333/FFF?text=AV" alt="Profile Picture" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-5xl sm:text-6xl font-extrabold text-white mb-4 typewriter">Alizainul Vaghjipurwala, M.Sc.</h1>
+            <p class="text-3xl sm:text-4xl text-orange-400 font-light mb-8">Mechatronics Engineer</p>
+            <div class="flex flex-wrap justify-center space-x-6 text-xl sm:text-2xl">
+                <a href="https://github.com/AliVaghjipur" target="_blank" class="hover:text-orange-400 transition duration-300 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.09.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.909-.62.068-.608.068-.608 1.007.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.088 2.91.829.091-.645.356-1.088.654-1.336-2.22-.253-4.555-1.119-4.555-4.935 0-1.092.39-1.983 1.029-2.682-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.022A9.284 9.284 0 0112 6.865c.85.004 1.705.115 2.504.337 1.909-1.292 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.65.64.699 1.029 1.59 1.029 2.682 0 3.823-2.339 4.681-4.566 4.925.359.309.678.92.678 1.855 0 1.336-.012 2.419-.012 2.747 0 .268.18.577.688.481C21.137 20.28 24 16.527 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
+                    GitHub
+                </a>
+                <a href="https://linkedin.com/in/AlizainulVaghjipurwala" target="_blank" class="hover:text-orange-400 transition duration-300 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.518V14.77c0-1.28-.46-2.15-1.61-2.15-.878 0-1.4.593-1.63 1.16-.07.2-.064.44-.064.686v5.986H9.72c.047-9.52 0-10.452 0-10.452h3.518v1.49h.05c.48-.737 1.29-1.63 2.87-1.63 2.09 0 3.65 1.37 3.65 4.31v6.282zM6.67 8.35c-1.15 0-1.92-.76-1.92-1.706C4.75 5.618 5.52 4.86 6.67 4.86c1.16 0 1.92.758 1.92 1.704 0 1.01-.76 1.78-1.92 1.78zm1.75 12.102H4.92V10.002h3.504v10.45zM22.25 0H1.75C.78 0 0 .778 0 1.75v20.5C0 23.222.78 24 1.75 24h20.5c.97 0 1.75-.778 1.75-1.75V1.75C24 .778 23.22 0 22.25 0z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="mailto:valizainul@gmail.com" class="hover:text-orange-400 transition duration-300 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884l8.995 5.996L2.003 17.876V5.884zM22 5.884v11.992L13.002 11.88zM12 13.996L2.003 7.884 12 2l9.997 5.884L12 13.996z"/></svg>
+                    Email
+                </a>
+                <a href="tel:+4915751881840" class="hover:text-orange-400 transition duration-300 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg>
+                    Phone
+                </a>
+            </div>
+        </section>
+
+        <!-- Summary Section -->
+        <section id="summary" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Summary</h2>
+            <p class="text-lg leading-relaxed bg-gray-800 p-6 rounded-lg shadow-md">
+                AI/ML engineer with a strong foundation in Deep Learning, Computer Vision, Sensor Fusion and Generative AI. Experienced in developing Autonomous
+                Driving Functions for Localization, Perception and Trajectory planning of vehicles. Proficient in building and deploying scalable machine learning solutions
+                using modern frameworks such as PyTorch, TensorFlow, and OpenCV. Solid understanding of 2D/3D perception, sensor data processing, state estimation
+                (Kalman/particle filters) and MLOps practices. Skilled in working with Maps (3D OpenDRIVE maps, Here HD maps, OSM) as well as concepts like SLAM.
+            </p>
+        </section>
+
+        <!-- Work Experience Section -->
+        <section id="experience" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Work Experience</h2>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Research Engineer (Master Thesis)</h3>
+                <p class="text-orange-300">Hella Forvia GmbH | Lippstadt, Germany</p>
+                <p class="text-gray-400 mb-4">Feb 2024 - Aug 2024</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Designed a Deep Learning -based virtual sensor framework to simulate GPS data during signal loss, enhancing localization robustness in challenging environments.</li>
+                    <li>Built a trajectory prediction model using vehicle telemetry and road topology data, enabling more intelligent path estimation under uncertainty.</li>
+                    <li>Engineered method to build lane level constraints from map data to enhance localization robustness.</li>
+                    <li>Applied signal processing and ML techniques for sensor data analysis to detect patterns and anomalies in driving behavior.</li>
+                </ul>
+            </div>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Engineering Intern</h3>
+                <p class="text-orange-300">Hella Forvia GmbH | Lippstadt, Germany</p>
+                <p class="text-gray-400 mb-4">Aug 2023 - Feb 2024</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Contributed to the development of 3D object detection and tracking using YOLOv8, as well as Lane detection for improved perception accuracy.</li>
+                    <li>Developed automated map parsing system for converting OpenDRIVE map data into MATLAB structures, enabling rapid prototyping.</li>
+                    <li>Built road network graphs using data from OpenDRIVE maps.</li>
+                    <li>Calibrated stereo and monocular cameras using Chessboard images.</li>
+                </ul>
+            </div>
+
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Graduate Engineer Trainee</h3>
+                <p class="text-orange-300">Sodecia India Pvt. Ltd. | Halol, Gujarat, India</p>
+                <p class="text-gray-400 mb-4">Jul 2019 - Oct 2019</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Planning and optimization of production by analyzing inventory, requirements and sales data.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Skills & Expertise</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Programming Languages -->
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Programming Languages</h3>
+                    <div class="space-y-4">
+                        <div class="skill-item">
+                            <p>Python</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 95%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>Matlab/Simulink</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>C++</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Libraries & Frameworks -->
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Libraries & Frameworks</h3>
+                    <div class="space-y-4">
+                        <div class="skill-item">
+                            <p>PyTorch</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>TensorFlow</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 88%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>OpenCV</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 92%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>Scikit-learn</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>Numpy, Pandas, Matplotlib</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <p>PCL, Keras, ROS, GIT, AWS, MLOps, Docker</p>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full skill-bar-inner" style="--skill-width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Core Expertise -->
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Core Expertise</h3>
+                    <ul class="list-disc pl-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 text-gray-300">
+                        <li>Artificial Intelligence</li>
+                        <li>Machine Learning</li>
+                        <li>Deep Learning</li>
+                        <li>Computer Vision</li>
+                        <li>Large Language Models (LLMs)</li>
+                        <li>Natural Language Processing (NLP)</li>
+                        <li>GAN, VAE</li>
+                        <li>ML Pipeline Design</li>
+                        <li>Data Architecture</li>
+                        <li>Model Deployment</li>
+                        <li>Cloud Platforms (AWS)</li>
+                        <li>CI/CD, MLOps, DevOps</li>
+                        <li>Analytical Thinking</li>
+                        <li>Communication</li>
+                        <li>Presentation</li>
+                        <li>Teamwork</li>
+                        <li>Curiosity</li>
+                        <li>Quick Learner</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Key Projects</h2>
+
+            <!-- Project Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-orange-600 hover:bg-orange-700 text-white font-semibold transition duration-300" data-filter="all">All</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="ml-dl">ML/DL</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="cv">Computer Vision</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="gen-ai">Generative AI</button>
+                <button class="project-filter-btn px-6 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold transition duration-300" data-filter="web-dev">Web Dev/Deployment</button>
+            </div>
+
+            <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1: LiDAR-Camera Fusion for 3D Object Detection -->
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl cv">
+                    <h3 class="text-2xl font-semibold text-white mb-3">LiDAR-Camera Fusion for 3D Object Detection</h3>
+                    <p class="text-gray-300 mb-4">Implemented state-of-the-art sensor fusion pipeline using KITTI dataset, achieving 89% detection accuracy. Integrated YOLOv5 with point cloud processing for robust 3D object detection and tracking. Developed custom data preprocessing pipeline handling multi-sensor synchronization.</p>
+                    <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
+                        View Project on GitHub
+                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5H11.5v3.25a.75.75 0 01-1.5 0v-4z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Project 2: Stable Diffusion model from scratch -->
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl gen-ai">
+                    <h3 class="text-2xl font-semibold text-white mb-3">Stable Diffusion model from scratch</h3>
+                    <p class="text-gray-300 mb-4">Built a Stable Diffusion model from scratch using PyTorch, building a complete text-to-image and image-to-image generation pipeline, gaining deep insights into generative AI models. Developed all components like the Variational Autoencoder (VAE) for latent encoding, a transformer-based text encoder and a U-Net with attention for denoising, CLIP and DDPM scheduler, developing complete end-to-end generative AI model.</p>
+                    <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
+                        View Project on GitHub
+                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5H11.5v3.25a.75.75 0 01-1.5 0v-4z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Project 3: Boston Housing Price prediction (model + deployment) -->
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl web-dev">
+                    <h3 class="text-2xl font-semibold text-white mb-3">Boston Housing Price prediction (model + deployment)</h3>
+                    <p class="text-gray-300 mb-4">Developed and deployed a Boston Housing Price Prediction web app using Flask, HTML, and Postman for API testing, serving a pickled Linear Regression model. Containerized the application with Docker and automated deployment using GitHub Actions and Render/Heroku, ensuring seamless CI/CD. Built and trained the model on the Boston Housing dataset, implementing data preprocessing, feature engineering, and model serialization for production readiness.</p>
+                    <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
+                        View Project on GitHub
+                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5H11.5v3.25a.75.75 0 01-1.5 0v-4z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Project 4: Autonomous Vehicle Behavioral Cloning -->
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="ml-dl cv">
+                    <h3 class="text-2xl font-semibold text-white mb-3">Autonomous Vehicle Behavioral Cloning</h3>
+                    <p class="text-gray-300 mb-4">Developed end-to-end deep learning system for autonomous vehicle control using behavioral cloning. Implemented data augmentation pipeline improving model generalization by around 35%. Achieved 97% successful autonomous navigation in various weather and lighting conditions.</p>
+                    <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
+                        View Project on GitHub
+                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5H11.5v3.25a.75.75 0 01-1.5 0v-4z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Project 5: Advanced Lane Detection -->
+                <div class="project-card p-6 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition duration-300" data-categories="cv">
+                    <h3 class="text-2xl font-semibold text-white mb-3">Advanced Lane Detection</h3>
+                    <p class="text-gray-300 mb-4">Applied Sobel and color thresholding with CLAHE for robust feature extraction under varying lighting. Implemented sliding window and memory-based lane tracking for frame-to-frame stability. Estimated lane curvature and vehicle offset in real-world units; overlayed results on video frames. Enhanced robustness with ROI masking and temporal smoothing for challenging environments (e.g., shadows, glare, tight curves).</p>
+                    <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-orange-400 hover:text-orange-300 font-medium flex items-center">
+                        View Project on GitHub
+                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5H11.5v3.25a.75.75 0 01-1.5 0v-4z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Education</h2>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">M.Sc. Mechanical Engineering ISE (Mechatronics Profile)</h3>
+                <p class="text-orange-300">Universität Duisburg Essen | Duisburg, Germany</p>
+                <p class="text-gray-400 mb-4">Oct 2021 - Aug 2024 | GPA: 1.9</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Machine Learning, Deep Learning, Computer Vision, Reinforcement Learning</li>
+                    <li>Control Theory, Model Predictive Control, Vision-Based Control</li>
+                    <li>Mathematical Optimization, Signal Processing, Kalman & Particle Filters</li>
+                    <li>Kinematics & Dynamics of Robotic Systems, Sensor Fusion</li>
+                </ul>
+            </div>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">B.E. Mechanical Engineering</h3>
+                <p class="text-orange-300">Gujarat Technological University | Gujarat, India</p>
+                <p class="text-gray-400 mb-4">Sep 2015 - Jun 2019</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Bachelor thesis: City Efficient Cars - Redesigning cars for reducing space occupied in the cities while in idle/parked condition</li>
+                </ul>
+            </div>
+
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Highschool (Qualification for University Education)</h3>
+                <p class="text-orange-300">Calorx Public School | Godhra, India</p>
+                <p class="text-gray-400 mb-4">Jul 2013 - Mar 2015</p>
+            </div>
+        </section>
+
+        <!-- Certifications & Courses -->
+        <section id="certifications" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Certifications & Courses</h2>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">The Complete Self Driving Car Course - Applied Deep Learning</h3>
+                <p class="text-orange-300">UDEMY</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Deep Neural Networks, Convolution Neural Networks, Multiclass Classification, Image recognition, Polynomial Regression, LeNet, Data Augmentation, Object Detection.</li>
+                </ul>
+            </div>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">AWS Machine Learning Foundations</h3>
+                <p class="text-orange-300">UDACITY</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Object Oriented Programming (OOP), Reinforcement Learning, AWS DeepRacer, Generative AI, AWS DeepComposer, AR-CNN, GAN.</li>
+                </ul>
+            </div>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Deep Learning with MATLAB</h3>
+                <p class="text-orange-300">Mathworks MATLAB</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Deep Network Design, Image Classification, Deep Learning for Computer Vision, Regression, Sequence Classification, Data Processing, Pattern Identification.</li>
+                </ul>
+            </div>
+
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Reinforcement Learning with MATLAB</h3>
+                <p class="text-orange-300">Mathworks MATLAB</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Deep Reinforcement Learning, Q-Learning, Deep Q-Networks (DQN), Agent-Environment Interaction, State, Action, Reward, Action-Value Function (Q).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Languages & Hobbies -->
+        <section id="languages-hobbies" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Languages & Interests</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Languages</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                        <li>German - Upper Intermediate (B2)</li>
+                        <li>English - Native/Bilingual (C1)</li>
+                        <li>Hindi - Native</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Hobbies and Interests</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                        <li>AI</li>
+                        <li>Physics</li>
+                        <li>Basketball</li>
+                        <li>Quizzing</li>
+                        <li>Volunteering</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteering Section -->
+        <section id="volunteering" class="py-16 fade-in-section">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2">Volunteering</h2>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Social worker, Head coordinator</h3>
+                <p class="text-orange-300">National Service Scheme (NSS), India</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Lead a team of 70 volunteers, organizing various events for underprivileged children, focusing on their education and overall development.</li>
+                    <li>Educating people in rural regions, farmers and dairy workers about the various government schemes.</li>
+                </ul>
+            </div>
+
+            <div class="mb-8 p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Volunteer</h3>
+                <p class="text-orange-300">Share A Book India Association (SABIA), India</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Book donation drives to build libraries in Government Schools in rural areas.</li>
+                </ul>
+            </div>
+
+            <div class="p-6 bg-gray-800 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-white mb-2">Volunteer</h3>
+                <p class="text-orange-300">Campus Garten, Germany</p>
+                <ul class="list-disc pl-5 space-y-2 text-gray-300">
+                    <li>Community gardening at the university campus along with sustainability programs like setting up rain water harvesting, organising clean-up drives and other events and discussions.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 fade-in-section text-center">
+            <h2 class="text-4xl font-bold text-orange-400 mb-6 border-b-2 border-gray-700 pb-2 inline-block">Get in Touch</h2>
+            <div class="mt-8 text-xl space-y-4">
+                <p class="flex items-center justify-center"><svg class="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884l8.995 5.996L2.003 17.876V5.884zM22 5.884v11.992L13.002 11.88zM12 13.996L2.003 7.884 12 2l9.997 5.884L12 13.996z"/></svg> valizainul@gmail.com</p>
+                <p class="flex items-center justify-center"><svg class="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg> +4915751881840</p>
+                <p class="flex items-center justify-center"><svg class="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg> Pestalozzistraße 8, 70563 Stuttgart, Germany</p>
+            </div>
+            <div class="flex justify-center space-x-6 mt-8">
+                <a href="https://github.com/AliVaghjipur" target="_blank" class="text-gray-400 hover:text-orange-400 transition duration-300">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.499.09.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.909-.62.068-.608.068-.608 1.007.07 1.532 1.03 1.532 1.03.892 1.529 2.341 1.088 2.91.829.091-.645.356-1.088.654-1.336-2.22-.253-4.555-1.119-4.555-4.935 0-1.092.39-1.983 1.029-2.682-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.022A9.284 9.284 0 0112 6.865c.85.004 1.705.115 2.504.337 1.909-1.292 2.747-1.022 2.747-1.022.546 1.379.202 2.398.099 2.65.64.699 1.029 1.59 1.029 2.682 0 3.823-2.339 4.681-4.566 4.925.359.309.678.92.678 1.855 0 1.336-.012 2.419-.012 2.747 0 .268.18.577.688.481C21.137 20.28 24 16.527 24 12.017 24 6.484 19.522 2 14 2h-2z" clip-rule="evenodd"></path></svg>
+                </a>
+                <a href="https://linkedin.com/in/AlizainulVaghjipurwala" target="_blank" class="text-gray-400 hover:text-orange-400 transition duration-300">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.518V14.77c0-1.28-.46-2.15-1.61-2.15-.878 0-1.4.593-1.63 1.16-.07.2-.064.44-.064.686v5.986H9.72c.047-9.52 0-10.452 0-10.452h3.518v1.49h.05c.48-.737 1.29-1.63 2.87-1.63 2.09 0 3.65 1.37 3.65 4.31v6.282zM6.67 8.35c-1.15 0-1.92-.76-1.92-1.706C4.75 5.618 5.52 4.86 6.67 4.86c1.16 0 1.92.758 1.92 1.704 0 1.01-.76 1.78-1.92 1.78zm1.75 12.102H4.92V10.002h3.504v10.45zM22.25 0H1.75C.78 0 0 .778 0 1.75v20.5C0 23.222.78 24 1.75 24h20.5c.97 0 1.75-.778 1.75-1.75V1.75C24 .778 23.22 0 22.25 0z"/></svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2024 Alizainul Vaghjipurwala. All rights reserved.</p>
+            <p>Built with <span class="text-red-500">&hearts;</span> and Tailwind CSS.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for fade-in sections
+        const fadeInSections = document.querySelectorAll('.fade-in-section');
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the section is visible
+
+        fadeInSections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Project Filtering Logic
+        const filterButtons = document.querySelectorAll('.project-filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Reset button styles
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-orange-600', 'hover:bg-orange-700', 'text-white');
+                    btn.classList.add('bg-gray-700', 'hover:bg-gray-600', 'text-gray-200');
+                });
+
+                // Apply active style to clicked button
+                button.classList.remove('bg-gray-700', 'hover:bg-gray-600', 'text-gray-200');
+                button.classList.add('bg-orange-600', 'hover:bg-orange-700', 'text-white');
+
+                const filter = button.dataset.filter;
+
+                projectCards.forEach(card => {
+                    const categories = card.dataset.categories.split(' ');
+                    if (filter === 'all' || categories.includes(filter)) {
+                        card.style.display = 'block';
+                        card.classList.add('is-visible'); // Trigger fade-in if not already visible
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.remove('is-visible');
+                    }
+                });
+            });
+        });
+
+        // Initialize display of all projects on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.project-filter-btn[data-filter="all"]').click();
+        });
+    </script>
+</body>
+</html>
+```
