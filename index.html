@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alizainul Vaghjipurwala - Mechatronics Engineer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Three.js for 2D/3D elements -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* --- Color Palette --- */
+        
+        /* --- NEW Color Palette from indexNew.html --- */
+        :root {
+            --color-bg: #F4F1DE;
+            --color-bg-dark: #3D405B;
+            --color-text: #3D405B;
+            --color-text-light: #F4F1DE;
+            --color-subtle-text: #6b7081;
+            --color-border: #e0dccc;
+            --color-accent-1: #E07A5F;
+            --color-accent-2: #81B29A;
+            --color-accent-3: #F2CC8F;
+            --color-particles: rgba(200, 200, 200, 0.05); /* New particle color */
+        }
+
+        [data-theme="dark"] {
+            --color-bg: #1A1A2E;
+            --color-bg-dark: #16213E;
+            --color-text: #F4F1DE;
+            --color-text-light: #F4F1DE;
+            --color-subtle-text: #a8a8a8;
+            --color-border: #2a2a3a;
+            --color-accent-1: #E94560;
+            --color-accent-2: #0F3460;
+            --color-accent-3: #533483;
+            --color-particles: rgba(15, 52, 96, 0.3); /* Dark mode particle color */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px; /* Ensure base font size is set */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        /* Particles background positioning  */
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure it's behind content */
+        }
+
+        /* --- Custom Cursor --- */
+        #cursor-dot, #cursor-outline {
+            pointer-events: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+            z-index: 9999;
+        }
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-accent-1);
+        }
+        #cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--color-accent-1);
+        }
+        body:hover #cursor-dot, body:hover #cursor-outline {
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            #cursor-dot, #cursor-outline { display: none; }
+             body { cursor: auto; }
+        }
+
+        /* --- General Layout & Section Styling --- */
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            background-color: var(--color-bg);
+        }
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            color: var(--color-subtle-text);
+        }
+        
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+        /* --- Header: Updated for new theme --- */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Higher z-index for fixed header */
+            padding: 1rem 2rem;
+            background: rgba(244, 241, 222, 0.8); /* Light mode background with transparency */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(26, 26, 46, 0.8); /* Dark mode background with transparency */
+        }
+        .header a { color: var(--color-subtle-text); }
+        .header a:hover { color: var(--color-text); }
+
+        /* --- Hero Section --- */
+        #home {
+            position: relative;
+            color: var(--color-text);
+        }
+        #home .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            position: relative; /* Ensure text is above canvas */
+            z-index: 1;
+        }
+        #home h1 {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 800;
+        }
+        #home .gradient-text {
+            background: linear-gradient(90deg, var(--color-accent-1), var(--color-accent-2));
+            -webkit-background-clip: text;
+            background-clip: text; /* Standard property for compatibility */
+            -webkit-text-fill-color: transparent;
+        }
+        #home p {
+            color: var(--color-subtle-text);
+            font-size: 1.25rem;
+        }
+        
+        /* --- Experience Section (Vertical Timeline) --- */
+        .timeline {
+            position: relative;
+            padding: 20px 0 20px 30px;
+            margin: 0;
+            list-style: none;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--color-border);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover {
+            transform: translateX(5px);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-accent-1);
+            border: 2px solid var(--color-bg);
+            transition: background 0.3s ease;
+        }
+        .timeline-item:hover::before {
+            background: var(--color-accent-2);
+        }
+        .timeline-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .timeline-title {
+            font-weight: 700;
+            color: var(--color-text);
+            font-size: 1.125rem; /* text-lg */
+        }
+        .timeline-date {
+            font-size: 0.875rem; /* text-sm */
+            color: var(--color-subtle-text);
+            white-space: nowrap;
+        }
+        .timeline-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+            opacity: 0;
+            padding-top: 5px;
+        }
+        .timeline-item:hover .timeline-details {
+            max-height: 1000px; /* Adjust as needed */
+            opacity: 1;
+        }
+        .timeline-details ul {
+            list-style: disc;
+            padding-left: 20px;
+            font-size: 0.875rem;
+            color: var(--color-subtle-text);
+        }
+        .timeline-company {
+            color: var(--color-accent-1);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        /* --- Carousel Styles --- */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-border);
+        }
+        .carousel-slides { display: flex; transition: transform 0.5s ease-in-out; }
+        .carousel-slide { min-width: 100%; }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text);
+            transition: background-color 0.2s;
+        }
+        .carousel-button:hover { background-color: white; }
+        .carousel-button.prev { left: 0.5rem; }
+        .carousel-button.next { right: 0.5rem; }
+
+        /* --- Project Cards --- */
+        .project-card-wrapper {
+             background: transparent;
+             border-radius: 0.75rem;
+             padding: 1px;
+             background-image: linear-gradient(to bottom right, var(--color-border), transparent);
+             transition: all 0.3s ease;
+        }
+        .project-card-wrapper:hover {
+             background-image: linear-gradient(to bottom right, var(--color-accent-1), var(--color-accent-2));
+        }
+        .project-card {
+            background-color: var(--color-bg);
+            border-radius: 0.7rem;
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .project-card-wrapper:hover .project-card { transform: scale(1.02); }
+        
+        .skill-card {
+            background-color: #fff;
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+            border: 1px solid var(--color-border);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            overflow: visible;
+        }
+        .skill-card:hover,
+        .skill-card:focus {
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(60,60,60,0.13);
+            z-index: 2;
+        }
+        .skill-card img,
+        .skill-card svg {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            pointer-events: none;
+        }
+
+        .skill-card .skill-emoji {
+            font-size: 2.2rem;
+            display: block;
+            text-align: center;
+            width: 100%;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .skill-card span:not(.skill-emoji) {
+            display: none;
+            position: absolute;
+            top: -2.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: var(--color-text);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.3em 0.9em;
+            border-radius: 1em;
+            box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s, top 0.2s;
+        }
+        [data-theme="dark"] .skill-card span:not(.skill-emoji) {
+            background: #23243a;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            border: 1px solid #33354a;
+        }
+        
+        .skill-card:hover span:not(.skill-emoji),
+        .skill-card:focus span:not(.skill-emoji) {
+            display: block;
+            opacity: 1;
+            top: -2;
+        }
+        @media (max-width: 640px) {
+            .skill-card {
+                width: 64px;
+                height: 64px;
+            }
+            .skill-card img,
+            .skill-card svg {
+                width: 32px;
+                height: 32px;
+            }
+            .skill-card span {
+                font-size: 0.8rem;
+                top: -1.7rem;
+            }
+            .skill-card:hover span,
+            .skill-card:focus span {
+                top: -2.1rem;
+            }
+        }
+
+        /* Theme Toggle Button Styles */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        @media (max-width: 768px) {
+            #mobile-menu {
+                transform: translateX(100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+            }
+            #mobile-menu.open {
+                transform: translateX(0) !important;
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        /* --- Custom scrollbar --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--color-bg); }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+    </style>
+</head>
+<body>
+    
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+
+    <header class="header">
+        <nav class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="#home" class="text-xl font-bold transition-colors">AV</a>
+            <div class="hidden md:flex items-center gap-4 md:gap-6 text-sm">
+                <a href="#about" class="transition-colors">About</a>
+                <a href="#skills" class="transition-colors">Skills</a>
+                <a href="#experience" class="transition-colors">Experience</a>
+                <a href="#education" class="transition-colors">Education</a>
+                <a href="#thesis" class="transition-colors">Thesis</a>
+                <a href="#projects" class="transition-colors">Projects</a>
+                <a href="#contact" class="transition-colors">Contact</a>
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <!-- Hamburger Button (hidden on md and up) -->
+            <button id="hamburger-btn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none" aria-label="Open menu">
+                <span class="block w-6 h-0.5 bg-[var(--color-text)] mb-1"></span>
+                <span class="block w-6 h-0.5 bg-[var(--color-text)] mb-1"></span>
+                <span class="block w-6 h-0.5 bg-[var(--color-text)]"></span>
+            </button>
+        </nav>
+    </header>
+    <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 bg-[var(--color-bg)] bg-opacity-95 z-[3000] flex flex-col pt-8 px-8 space-y-6 text-xl font-semibold overflow-y-auto translate-x-full md:hidden">
+            <button id="close-mobile-menu" class="self-end mb-8 text-3xl text-[var(--color-text)]" aria-label="Close menu">&times;</button>
+            <a href="#about" class="mobile-link">About</a>
+            <a href="#skills" class="mobile-link">Skills</a>
+            <a href="#experience" class="mobile-link">Experience</a>
+            <a href="#education" class="mobile-link">Education</a>
+            <a href="#thesis" class="mobile-link">Thesis</a>
+            <a href="#projects" class="mobile-link">Projects</a>
+            <a href="#contact" class="mobile-link">Contact</a>
+            <button id="mobile-theme-toggle" class="theme-toggle text-2xl">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+    <main>
+        <section id="home" class="min-h-screen flex items-center">
+             <canvas id="three-canvas"></canvas>
+            <div class="content-wrapper relative z-10 flex flex-col justify-between h-full">
+                <div>
+                    <h1 class="font-bold">Alizainul Vaghjipurwala</h1>
+                    <h2 class="text-3xl font-semibold mt-2 gradient-text">I am a Mechatronics Engineer</h2>
+                    <p class="mt-4 text-lg max-w-2xl">
+                        I build intelligent systems at the intersection of AI and Mechanical Engineering. Currently based in Stuttgart, Germany.
+                    </p>
+                    <div class="mt-8 flex gap-4">
+                        <a href="https://github.com/AliVaghjipur" target="_blank" class="text-2xl text-[var(--color-subtle-text)] hover:text-[var(--color-text)] transition-colors"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/alizainul-vaghjipurwala-245030169?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BwPYtJes1SrqpRrvyYYfnpA%3D%3D" target="_blank" class="text-2xl text-[var(--color-subtle-text)] hover:text-[var(--color-text)] transition-colors"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:valizainul@gmail.com" class="text-2xl text-[var(--color-subtle-text)] hover:text-[var(--color-text)] transition-colors"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <!-- Download CV Button -->
+                <div class="absolute bottom-10 right-10 md:bottom-20 md:right-20">
+                    <a href="https://github.com/AliVaghjipur/alizainul-cv/raw/355b4faed600a6f6bfe963632e7d56eb2cc50b0e/pdf/Alizainul_AIEngineer_CV.pdf" download="Alizainul_Vaghjipurwala_CV.pdf" class="inline-block bg-[var(--color-accent-2)] hover:bg-green-600 transition-colors text-white font-bold py-3 px-6 rounded-md shadow-lg">
+                        Download my CV
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- All subsequent sections will have the light background -->
+        <div class="relative">
+            <section id="about" class="section-container fade-in-on-scroll">
+                 <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <h2 class="section-title md:col-span-1">About</h2>
+                    <div class="md:col-span-2 flex flex-col sm:flex-row gap-8">
+                        <div class="text-lg text-[var(--color-subtle-text)] space-y-4 flex-1">
+                             <p>
+                                Hi! My name is Alizainul. I am a Mechatronics Engineer. I am from a small town in India, currently living in Stuttgart, Germany. 
+                            </p>
+                            <p>
+                                I love developing efficient solutions and optimized systems by using my skills in Supervised and Unsupervised Machine Learning, Deep Learning, Computer Vision and Sensor Fusion. I'm driven by curiosity and a desire to create technology that is both intelligent and impactful.
+                            </p>
+                            <p> Apart from Engineering, I am a Basketball player (Bezirksliga). I love Quizzing, not just taking part in quizzes but conducting fun Quizzes myself (Nerd alert!). I have also enjoyed volunteering work for many years and always look for such opportunities.</p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <img src="https://github.com/AliVaghjipur/alizainul-cv/raw/main/Adobe%20Express%20-%20file.png" alt="Alizainul Vaghjipurwala" class="rounded-full w-44 h- 44 object-cover mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/128x128/3B82F6/FFFFFF?text=AV'">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="section-container fade-in-on-scroll">
+                <h2 class="section-title text-center mb-8">Skills</h2>
+                <div class="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-5 gap-12 justify-items-center">
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Python SVG -->
+                        <img src="https://www.python.org/static/favicon.ico" alt="Python Icon" onerror="this.onerror=null;this.src='https://placehold.co/40x40/fbbf24/FFFFFF?text=PY'">
+                        <span>Python</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Matlab SVG -->
+                        <svg class="w-10 h-10" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a" x1="16.803" y1="16.631" x2="15.013" y2="22.411" gradientTransform="matrix(1, 0, 0, -1, 0, 32)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#512"/><stop offset="0.23" stop-color="#523"/><stop offset="0.36" stop-color="#534"/><stop offset="0.51" stop-color="#645"/><stop offset="0.66" stop-color="#568"/><stop offset="0.84" stop-color="#29d"/></linearGradient><linearGradient id="b" x1="29.71" y1="18.983" x2="11.71" y2="14.563" gradientUnits="userSpaceOnUse"><stop offset="0.081" stop-color="#c33"/><stop offset="0.189" stop-color="#de5239"/><stop offset="0.313" stop-color="#f06e3e"/><stop offset="0.421" stop-color="#fa8042"/><stop offset="0.5" stop-color="#fe8643"/><stop offset="0.58" stop-color="#fa7f42"/><stop offset="0.696" stop-color="#ef6c3e"/><stop offset="0.833" stop-color="#dc4c37"/><stop offset="0.916" stop-color="#cf3633"/></linearGradient></defs><title>file_type_matlab</title><path d="M2,17.55l7.97-3.22a20.7,20.7,0,0,1,2.72-2.95c.66-.35,1.9-.16,4.17-2.98,2.2-2.75,2.9-5.1,3.93-5.1,1.63,0,2.83,3.52,4.65,8.85A115.629,115.629,0,0,0,30,24.12c-1.9-1.77-3.52-3.68-5.37-3.63-1.72.04-3.63,2.08-5.72,4.7-1.66,2.1-3.86,3.54-4.72,3.51,0,0-2.22-6.28-4.08-7.3a2.641,2.641,0,0,0-2.39.2L2,17.54Z" style="fill:#49d"/><path d="M19.8,4.02c-.67.9-1.48,2.55-2.94,4.38-2.27,2.82-3.5,2.63-4.17,2.98a19.674,19.674,0,0,0-2.72,2.95l3.3,2.41c2.8-3.82,4.3-7.96,5.47-10.64A13.579,13.579,0,0,1,19.8,4.02Z" style="fill:url(#a)"/><path d="M20.8,3.3c-2.18,0-3.67,11.48-11.72,17.89,2.26-.37,4.22,5.24,5.12,7.51,4-.68,7.2-8.33,10.43-8.21,1.85.07,3.47,1.86,5.37,3.63C25.66,15,23.63,3.3,20.8,3.3Z" style="fill:url(#b)"/></svg>
+                        <span>Matlab/Simulink</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- C++ SVG -->
+                        <svg class="w-10 h-10" viewBox="0 0 256 288" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet"><path d="M255.569 84.72c-.002-4.83-1.035-9.098-3.124-12.761-2.052-3.602-5.125-6.621-9.247-9.008-34.025-19.619-68.083-39.178-102.097-58.817-9.17-5.294-18.061-5.101-27.163.269C100.395 12.39 32.59 51.237 12.385 62.94 4.064 67.757.015 75.129.013 84.711 0 124.166.013 163.62 0 203.076c.002 4.724.991 8.909 2.988 12.517 2.053 3.711 5.169 6.813 9.386 9.254 20.206 11.703 88.02 50.547 101.56 58.536 9.106 5.373 17.997 5.565 27.17.269 34.015-19.64 68.075-39.198 102.105-58.817 4.217-2.44 7.333-5.544 9.386-9.252 1.994-3.608 2.985-7.793 2.987-12.518 0 0 0-78.889-.013-118.345" fill="#5C8DBC"/><path d="M128.182 143.509L2.988 215.593c2.053 3.711 5.169 6.813 9.386 9.254 20.206 11.703 88.02 50.547 101.56 58.536 9.106 5.373 17.997 5.565 27.17.269 34.015-19.64 68.075-39.198 102.105-58.817 4.217-2.44 7.333-5.544 9.386-9.252l-124.413-72.074" fill="#1A4674"/><path d="M91.101 164.861c7.285 12.718 20.98 21.296 36.69 21.296 15.807 0 29.58-8.687 36.828-21.541l-36.437-21.107-37.081 21.352" fill="#1A4674"/><path d="M255.569 84.72c-.002-4.83-1.035-9.098-3.124-12.761l-124.263 71.55 124.413 72.074c1.994-3.608 2.985-7.793 2.987-12.518 0 0 0-78.889-.013-118.345" fill="#1B598E"/><path d="M248.728 148.661h-9.722v9.724h-9.724v-9.724h-9.721v-9.721h9.721v-9.722h9.724v9.722h9.722v9.721M213.253 148.661h-9.721v9.724h-9.722v-9.724h-9.722v-9.721h9.722v-9.722h9.722v9.722h9.721v9.721" fill="#FFF"/><path d="M164.619 164.616c-7.248 12.854-21.021 21.541-36.828 21.541-15.71 0-29.405-8.578-36.69-21.296a42.062 42.062 0 0 1-5.574-20.968c0-23.341 18.923-42.263 42.264-42.263 15.609 0 29.232 8.471 36.553 21.059l36.941-21.272c-14.683-25.346-42.096-42.398-73.494-42.398-46.876 0-84.875 38-84.875 84.874 0 15.378 4.091 29.799 11.241 42.238 14.646 25.48 42.137 42.637 73.634 42.637 31.555 0 59.089-17.226 73.714-42.781l-36.886-21.371" fill="#FFF"/></svg>
+                        <span>C++</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- PyTorch SVG -->
+                        <svg class="w-10 h-10" viewBox="-27 0 310 310" version="1.1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><g><path d="M218.281037,90.106412 C268.572988,140.398363 268.572988,221.075034 218.281037,271.716235 C169.036835,322.008186 88.0109141,322.008186 37.7189632,271.716235 C-12.5729877,221.424284 -12.5729877,140.398363 37.7189632,90.106412 L127.825375,0 L127.825375,45.053206 L119.443383,53.4351978 L59.7216917,113.156889 C22.0027285,150.177353 22.0027285,210.946794 59.7216917,248.665757 C96.7421555,286.38472 157.511596,286.38472 195.230559,248.665757 C232.949523,211.645293 232.949523,150.875853 195.230559,113.156889 L218.281037,90.106412 Z M173.227831,84.5184175 C163.969338,84.5184175 156.463847,77.0129263 156.463847,67.7544338 C156.463847,58.4959413 163.969338,50.9904502 173.227831,50.9904502 C182.486323,50.9904502 189.991814,58.4959413 189.991814,67.7544338 C189.991814,77.0129263 182.486323,84.5184175 173.227831,84.5184175 Z" fill="#EE4C2C"></path></g></svg>
+                        <span>PyTorch</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- TensorFlow SVG -->
+                        <svg viewBox="-9 0 274 274" version="1.1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><g><path d="M145.726081,42.0651946 L145.726081,84.1347419 L218.586952,126.204312 L218.586952,84.1347419 L145.726081,42.0651946 Z M-1.98726454e-07,84.1347419 L-1.98726454e-07,126.204312 L36.4304238,147.234755 L36.4304238,105.169527 L-1.98726454e-07,84.1347419 Z M109.291294,105.169527 L72.8608701,126.204312 L72.8608701,252.404316 L109.291294,273.439101 L109.291294,189.304303 L145.726081,210.339088 L145.726081,168.26954 L109.291294,147.234755 L109.291294,105.169527 Z" fill="#E55B2D"></path><path d="M145.726081,42.0651946 L36.4304238,105.169527 L36.4304238,147.234755 L109.291294,105.169527 L109.291294,147.234755 L145.726081,126.204312 L145.726081,42.0651946 Z M255.021717,63.0999794 L218.586952,84.1347419 L218.586952,126.204312 L255.021717,105.169527 L255.021717,63.0999794 Z M182.156505,147.234755 L145.726081,168.26954 L145.726081,210.339088 L182.156505,189.304303 L182.156505,147.234755 Z M145.726081,210.339088 L109.291294,189.304303 L109.291294,273.439101 L145.726081,252.404316 L145.726081,210.339088 Z" fill="#ED8E24"></path><path d="M145.726081,-3.41864288e-05 L-1.98726454e-07,84.1347419 L36.4304238,105.169527 L145.726081,42.0651946 L218.586952,84.1347419 L255.021717,63.0999794 L145.726081,-3.41864288e-05 Z M145.726081,126.204312 L109.291294,147.234755 L145.726081,168.26954 L182.156505,147.234755 L145.726081,126.204312 Z" fill="#F8BF3C"></path></g></svg>
+                        <span>TensorFlow</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- OpenCV SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="164" height="153" viewBox="0 0 164 153" fill="none"><path d="M144.618 79.1998C156.154 85.9868 163.907 98.5221 163.932 112.877C163.969 134.484 146.484 152.031 124.877 152.068C103.269 152.106 85.7225 134.62 85.6847 113.013C85.6597 98.6587 93.3683 86.0964 104.881 79.2691L116.123 98.2666C116.405 98.7431 116.245 99.3554 115.787 99.6669C111.536 102.561 108.748 107.443 108.758 112.973C108.773 121.837 115.972 129.011 124.836 128.995C133.701 128.98 140.874 121.781 140.859 112.917C140.849 107.387 138.044 102.515 133.783 99.6355C133.324 99.3256 133.162 98.7139 133.442 98.2364L144.618 79.1998Z" fill="#128DFF"></path><path d="M58.2668 78.9714C52.6177 75.8052 46.1027 74 39.1662 74C17.5588 74 0.0426025 91.5162 0.0426025 113.124C0.0426025 134.731 17.5588 152.247 39.1662 152.247C60.8798 152.247 78.8229 133.813 78.2771 112.12H56.2529C55.6746 112.12 55.2192 112.609 55.2155 113.188C55.1596 121.833 47.9463 129.174 39.1662 129.174C30.3016 129.174 23.1155 121.988 23.1155 113.124C23.1155 104.259 30.3016 97.0729 39.1662 97.0729C41.4876 97.0729 43.694 97.5657 45.6863 98.4525C46.1732 98.6692 46.7542 98.505 47.0247 98.0459L58.2668 78.9714Z" fill="#8BDA67"></path><path d="M61.431 72.834C49.9062 66.0268 42.1757 53.4779 42.1757 39.1235C42.1757 17.5162 59.6919 0 81.2992 0C102.907 0 120.423 17.5162 120.423 39.1235C120.423 53.4779 112.692 66.0268 101.167 72.834L89.9591 53.8169C89.678 53.3399 89.8386 52.7279 90.2968 52.4171C94.5531 49.5307 97.3499 44.6537 97.3499 39.1235C97.3499 30.259 90.1638 23.0729 81.2992 23.0729C72.4347 23.0729 65.2485 30.259 65.2485 39.1235C65.2485 44.6537 68.0453 49.5307 72.3016 52.4171C72.7599 52.7279 72.9204 53.3399 72.6393 53.8169L61.431 72.834Z" fill="#FF2A44"></path></svg> 
+                        <span>OpenCV</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Scikit-learn SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.31937 149.55879" enable-background="new 0 0 792 612"><g transform="translate(-120.60861,-220.26017)"><path d="m 333.32,347.348 c 33.869,-33.867 39.498,-83.146 12.572,-110.07 -26.922,-26.921 -76.199,-21.293 -110.066,12.572 -33.867,33.866 -24.07,98.568 -12.57,110.07 9.293,9.293 76.199,21.293 110.064,-12.572 z" style="fill:#f89939" /><path d="m 194.35,298.411 c -19.648,-19.648 -48.242,-22.919 -63.867,-7.295 -15.621,15.622 -12.355,44.22 7.297,63.865 19.652,19.654 57.195,13.969 63.863,7.295 5.396,-5.387 12.361,-44.215 -7.293,-63.865 z" style="fill:#3499cd" /></g><g transform="translate(-120.60861,-220.26017)"><g><path d="m 262.143,339.047 c -3.471,3.195 -6.516,5.553 -9.133,7.068 -2.617,1.52 -5.113,2.279 -7.488,2.279 -2.732,0 -4.936,-1.059 -6.607,-3.178 -1.674,-2.121 -2.508,-4.965 -2.508,-8.543 0,-5.361 1.162,-11.797 3.486,-19.301 2.32,-7.51 5.145,-14.43 8.463,-20.761 l 9.729,-3.602 c 0.305,-0.102 0.537,-0.154 0.691,-0.154 0.738,0 1.348,0.544 1.816,1.627 0.473,1.088 0.711,2.55 0.711,4.388 0,5.209 -1.199,10.252 -3.602,15.129 -2.402,4.879 -6.154,10.086 -11.26,15.627 -0.205,2.656 -0.307,4.48 -0.307,5.477 0,2.223 0.408,3.982 1.225,5.285 0.818,1.305 1.902,1.953 3.256,1.953 1.381,0 2.848,-0.494 4.406,-1.49 1.555,-0.998 3.93,-3.064 7.121,-6.207 v 4.403 z m -14.668,-14.973 c 3.242,-3.605 5.875,-7.648 7.891,-12.121 2.016,-4.475 3.023,-8.324 3.023,-11.549 0,-0.94 -0.139,-1.704 -0.418,-2.278 -0.281,-0.575 -0.641,-0.864 -1.074,-0.864 -0.941,0 -2.316,2.352 -4.117,7.057 -1.801,4.704 -3.569,11.29 -5.305,19.755 z" style="fill:#010101" /><path d="m 290.795,339.047 c -3.242,3.195 -6.152,5.553 -8.732,7.068 -2.58,1.52 -5.424,2.279 -8.541,2.279 -3.473,0 -6.275,-1.111 -8.41,-3.33 -2.131,-2.225 -3.195,-5.146 -3.195,-8.773 0,-5.412 1.875,-10.309 5.633,-14.688 3.75,-4.381 7.914,-6.57 12.484,-6.57 2.375,0 4.275,0.615 5.707,1.84 1.43,1.227 2.145,2.834 2.145,4.826 0,5.287 -5.617,9.574 -16.852,12.869 1.02,4.977 3.688,7.469 8.004,7.469 1.686,0 3.293,-0.453 4.824,-1.357 1.535,-0.908 3.844,-2.922 6.934,-6.035 v 4.402 z m -20.07,-7.084 c 6.535,-1.84 9.805,-5.234 9.805,-10.188 0,-2.451 -0.895,-3.676 -2.68,-3.676 -1.686,0 -3.293,1.281 -4.824,3.85 -1.536,2.565 -2.301,5.901 -2.301,10.014 z" style="fill:#010101" /><path d="m 331.701,339.047 c -4.086,3.881 -7.01,6.412 -8.77,7.588 -1.762,1.174 -3.447,1.76 -5.057,1.76 -4.035,0 -5.936,-3.561 -5.707,-10.686 -2.553,3.65 -4.91,6.344 -7.068,8.084 -2.156,1.736 -4.383,2.602 -6.684,2.602 -2.244,0 -4.152,-1.051 -5.725,-3.158 -1.573,-2.107 -2.354,-4.691 -2.354,-7.758 0,-3.828 1.051,-7.48 3.156,-10.955 2.109,-3.473 4.809,-6.279 8.102,-8.424 3.293,-2.145 6.207,-3.219 8.732,-3.219 3.193,0 5.428,1.469 6.705,4.404 l 7.828,-4.326 h 2.148 l -3.381,11.221 c -1.736,5.645 -2.607,9.514 -2.607,11.607 0,2.195 0.777,3.293 2.336,3.293 0.992,0 2.09,-0.529 3.291,-1.59 1.201,-1.061 2.883,-2.676 5.053,-4.846 v 4.403 z m -28.037,2.109 c 2.553,0 4.959,-2.176 7.223,-6.529 2.26,-4.355 3.389,-8.373 3.389,-12.049 0,-1.428 -0.322,-2.547 -0.957,-3.35 -0.641,-0.807 -1.496,-1.207 -2.566,-1.207 -2.555,0 -4.977,2.17 -7.258,6.512 -2.285,4.342 -3.43,8.338 -3.43,11.986 0,1.381 0.34,2.498 1.016,3.354 0.676,0.856 1.534,1.283 2.583,1.283 z" style="fill:#010101" /><path d="m 360.314,339.047 c -6.41,6.281 -11.352,9.424 -14.824,9.424 -1.559,0 -2.875,-0.658 -3.945,-1.969 -1.07,-1.316 -1.609,-2.945 -1.609,-4.887 0,-3.6 1.93,-8.424 5.785,-14.477 -1.891,0.971 -3.957,1.645 -6.205,2.029 -1.66,3.064 -4.266,6.359 -7.814,9.879 h -0.879 v -3.443 c 1.99,-2.068 3.791,-4.291 5.4,-6.666 -2.199,-0.971 -3.295,-2.414 -3.295,-4.326 0,-1.969 0.668,-4.068 2.012,-6.305 1.34,-2.232 3.184,-3.348 5.535,-3.348 1.992,0 2.986,1.018 2.986,3.062 0,1.609 -0.574,3.906 -1.725,6.895 4.238,-0.461 7.941,-3.701 11.109,-9.729 l 3.484,-0.154 -3.562,9.805 c -1.48,4.137 -2.438,6.955 -2.871,8.447 -0.433,1.492 -0.652,2.816 -0.652,3.963 0,1.074 0.25,1.932 0.746,2.566 0.498,0.643 1.17,0.959 2.012,0.959 0.918,0 1.801,-0.314 2.643,-0.936 0.842,-0.631 2.732,-2.359 5.67,-5.193 v 4.404 z" style="fill:#010101" /><path d="m 397.928,339.047 c -5.898,6.234 -10.957,9.348 -15.168,9.348 -1.711,0 -3.09,-0.6 -4.137,-1.801 -1.049,-1.199 -1.572,-2.807 -1.572,-4.824 0,-2.732 1.125,-6.908 3.373,-12.523 1.199,-3.014 1.801,-4.932 1.801,-5.746 0,-0.818 -0.322,-1.227 -0.957,-1.227 -0.357,0 -0.832,0.18 -1.418,0.535 -0.539,0.357 -1.164,0.859 -1.879,1.496 -0.637,0.586 -1.354,1.301 -2.145,2.141 -0.691,0.721 -1.432,1.537 -2.219,2.453 l -2.148,2.492 c -0.943,1.148 -1.531,2.359 -1.76,3.637 -0.385,2.17 -0.639,4.164 -0.768,5.979 -0.078,1.35 -0.115,3.174 -0.115,5.477 l -8.465,1.988 c -0.279,-3.447 -0.422,-6.014 -0.422,-7.697 0,-4.111 0.479,-8.006 1.438,-11.682 0.957,-3.68 2.494,-7.814 4.615,-12.412 l 9.344,-1.799 c -1.965,5.287 -3.254,9.447 -3.867,12.484 4.188,-4.672 7.508,-7.906 9.969,-9.709 2.457,-1.801 4.645,-2.697 6.557,-2.697 1.299,0 2.385,0.49 3.25,1.471 0.869,0.982 1.301,2.215 1.301,3.689 0,2.449 -1.098,6.484 -3.291,12.104 -1.508,3.854 -2.262,6.355 -2.262,7.51 0,1.537 0.627,2.305 1.881,2.305 1.867,0 4.891,-2.465 9.064,-7.393 z" style="fill:#010101" /></g></g><text font-size="23.0795" style="font-size:23.0795002px;line-height:0%;font-family:Helvetica;fill:#ffffff" x="153.33279" y="81.945938">scikit</text></svg>
+                        <span>Scikit-learn</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Numpy SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path d="M54.32 27.164L33.304 16.559 10.226 28.071l21.594 10.84zM63.961 32.031L86 43.16 63.137 54.637 41.512 43.782zM93.398 16.715l22.645 11.355-20.254 10.168-22.082-11.141zM83.652 11.824L63.265 1.601 43.101 11.667l21.008 10.59zM67.715 99.605v27.816l24.695-12.324-.023-27.828zM92.375 77.555l-.027-27.535-24.633 12.246v27.547zM122.02 72.398v27.926l-21.066 10.508-.016-27.797zM122.02 62.633V35.266l-21.105 10.492.016 27.59z" color="#000" fill="#4cabcf" style="-inkscape-stroke:none"/><path d="M58.996 62.266l-16.629-8.367v36.14S22.019 46.756 20.14 42.865c-.242-.504-1.242-1.051-1.496-1.188-3.668-1.914-14.355-7.324-14.355-7.324v63.871l14.785 7.926V72.75s20.129 38.676 20.336 39.102c.21.422 2.219 4.492 4.383 5.926 2.87 1.906 15.195 9.316 15.195 9.316z" color="#000" fill="#4c75cf" style="-inkscape-stroke:none"/></svg>
+                        <span>Numpy</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Pandas SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path style="-inkscape-stroke:none" d="M48.697 15.176h12.25v25.437h-12.25zm0 52.251h12.25v25.436h-12.25z" color="#000" fill="#130754"/><path style="-inkscape-stroke:none" d="M48.697 48.037h12.25v12.001h-12.25z" color="#000" fill="#ffca00"/><path style="-inkscape-stroke:none" d="M29.017 36.087h12.25v84.552h-12.25zM67.97 88.414h12.25v25.436H67.97zm0-52.297h12.25v25.437H67.97z" color="#000" fill="#130754"/><path style="-inkscape-stroke:none" d="M67.97 68.983h12.25v12.001H67.97z" color="#000" fill="#e70488"/><path style="-inkscape-stroke:none" d="M87.238 8.55h12.25v84.552h-12.25z" color="#000" fill="#130754"/></svg>
+                        <span>Pandas</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Matplotlib SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><circle cx="24" cy="24" r="21" fill="#fcfdfa"/><path fill="#bdbdbd" d="M24,45C12.421,45,3,35.579,3,24S12.421,3,24,3s21,9.421,21,21S35.579,45,24,45z M24,4 C12.972,4,4,12.972,4,24s8.972,20,20,20s20-8.972,20-20S35.028,4,24,4z"/><path fill="#bdbdbd" d="M24,41c-9.374,0-17-7.626-17-17S14.626,7,24,7s17,7.626,17,17S33.374,41,24,41z M24,8 C15.178,8,8,15.178,8,24s7.178,16,16,16s16-7.178,16-16S32.822,8,24,8z"/><path fill="#bdbdbd" d="M24,37c-7.168,0-13-5.832-13-13s5.832-13,13-13s13,5.832,13,13S31.168,37,24,37z M24,12 c-6.617,0-12,5.383-12,12s5.383,12,12,12s12-5.383,12-12S30.617,12,24,12z"/><path fill="#bdbdbd" d="M24,33c-4.963,0-9-4.037-9-9s4.037-9,9-9s9,4.037,9,9S28.963,33,24,33z M24,16 c-4.411,0-8,3.589-8,8s3.589,8,8,8s8-3.589,8-8S28.411,16,24,16z"/><path fill="#bdbdbd" d="M24,29c-2.757,0-5-2.243-5-5s2.243-5,5-5s5,2.243,5,5S26.757,29,24,29z M24,20 c-2.206,0-4,1.794-4,4s1.794,4,4,4s4-1.794,4-4S26.206,20,24,20z"/><rect width="1" height="21" x="23.5" y="3" fill="#bdbdbd"/><rect width="1" height="20.506" x="16.25" y="6.497" fill="#bdbdbd" transform="rotate(-45.001 16.75 16.75)"/><rect width="20" height="1" x="4" y="23.5" fill="#bdbdbd"/><rect width="20.506" height="1" x="6.497" y="30.75" fill="#bdbdbd" transform="rotate(-45.001 16.75 31.25)"/><rect width="1" height="21" x="23.5" y="24" fill="#bdbdbd"/><rect width="1" height="20.408" x="30.715" y="21.011" fill="#bdbdbd" transform="rotate(-45.001 31.215 31.216)"/><rect width="21" height="1" x="24" y="23.5" fill="#bdbdbd"/><rect width="20.506" height="1" x="20.997" y="16.25" fill="#bdbdbd" transform="rotate(-45.001 31.25 16.75)"/><polygon fill="#ef6c00" points="24,24 13,9 19,6"/><polygon fill="#aed581" points="24,24 28,10 32,12"/><polygon fill="#ffea3b" points="8.5,20 8.5,28 24,24"/><polygon fill="#8bc34a" points="24,24 22,35 26,35"/><polygon fill="#ff9800" points="24,24 35,39 39,35"/><polygon fill="#304ffe" points="14,28 24,24 15,30"/><polygon fill="#304ffe" points="29.564,20.872 24,24 30.138,22.468"/></svg>
+                        <span>Matplotlib</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- AWS SVG -->
+                        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"><path fill="#252F3E" d="M4.51 7.687c0 .197.02.357.058.475.042.117.096.245.17.384a.233.233 0 01.037.123c0 .053-.032.107-.1.16l-.336.224a.255.255 0 01-.138.048c-.054 0-.107-.026-.16-.074a1.652 1.652 0 01-.192-.251 4.137 4.137 0 01-.165-.315c-.415.491-.936.737-1.564.737-.447 0-.804-.129-1.064-.385-.261-.256-.394-.598-.394-1.025 0-.454.16-.822.484-1.1.325-.278.756-.416 1.304-.416.18 0 .367.016.564.042.197.027.4.07.612.118v-.39c0-.406-.085-.689-.25-.854-.17-.166-.458-.246-.868-.246-.186 0-.377.022-.574.07a4.23 4.23 0 00-.575.181 1.525 1.525 0 01-.186.07.326.326 0 01-.085.016c-.075 0-.112-.054-.112-.166v-.262c0-.085.01-.15.037-.186a.399.399 0 01.15-.113c.185-.096.409-.176.67-.24.26-.07.537-.101.83-.101.633 0 1.096.144 1.394.432.293.288.442.726.442 1.314v1.73h.01zm-2.161.811c.175 0 .356-.032.548-.096.191-.064.362-.182.505-.342a.848.848 0 00.181-.341c.032-.129.054-.283.054-.465V7.03a4.43 4.43 0 00-.49-.09 3.996 3.996 0 00-.5-.033c-.357 0-.618.07-.793.214-.176.144-.26.347-.26.614 0 .25.063.437.196.566.128.133.314.197.559.197zm4.273.577c-.096 0-.16-.016-.202-.054-.043-.032-.08-.106-.112-.208l-1.25-4.127a.938.938 0 01-.049-.214c0-.085.043-.133.128-.133h.522c.1 0 .17.016.207.053.043.032.075.107.107.208l.894 3.535.83-3.535c.026-.106.058-.176.1-.208a.365.365 0 01.214-.053h.425c.102 0 .17.016.213.053.043.032.08.107.101.208l.841 3.578.92-3.578a.458.458 0 01.107-.208.346.346 0 01.208-.053h.495c.085 0 .133.043.133.133 0 .027-.006.054-.01.086a.76.76 0 01-.038.133l-1.283 4.127c-.032.107-.069.177-.111.209a.34.34 0 01-.203.053h-.457c-.101 0-.17-.016-.213-.053-.043-.038-.08-.107-.101-.214L8.213 5.37l-.82 3.439c-.026.107-.058.176-.1.213-.043.038-.118.054-.213.054h-.458zm6.838.144a3.51 3.51 0 01-.82-.096c-.266-.064-.473-.134-.612-.214-.085-.048-.143-.101-.165-.15a.378.378 0 01-.031-.149v-.272c0-.112.042-.166.122-.166a.3.3 0 01.096.016c.032.011.08.032.133.054.18.08.378.144.585.187.213.042.42.064.633.064.336 0 .596-.059.777-.176a.575.575 0 00.277-.508.52.52 0 00-.144-.373c-.095-.102-.276-.193-.537-.278l-.772-.24c-.388-.123-.676-.305-.851-.545a1.275 1.275 0 01-.266-.774c0-.224.048-.422.143-.593.096-.17.224-.32.384-.438.16-.122.34-.213.553-.277.213-.064.436-.091.67-.091.118 0 .24.005.357.021.122.016.234.038.346.06.106.026.208.052.303.085.096.032.17.064.224.096a.46.46 0 01.16.133.289.289 0 01.047.176v.251c0 .112-.042.171-.122.171a.552.552 0 01-.202-.064 2.427 2.427 0 00-1.022-.208c-.303 0-.543.048-.708.15-.165.1-.25.256-.25.475 0 .149.053.277.16.379.106.101.303.202.585.293l.756.24c.383.123.66.294.825.513.165.219.244.47.244.748 0 .23-.047.437-.138.619a1.436 1.436 0 01-.388.47c-.165.133-.362.23-.591.299-.24.075-.49.112-.761.112z"/><g fill="#F90" fill-rule="evenodd" clip-rule="evenodd"><path d="M14.465 11.813c-1.75 1.297-4.294 1.986-6.481 1.986-3.065 0-5.827-1.137-7.913-3.027-.165-.15-.016-.353.18-.235 2.257 1.313 5.04 2.109 7.92 2.109 1.941 0 4.075-.406 6.039-1.239.293-.133.543.192.255.406z"/><path d="M15.194 10.98c-.223-.287-1.479-.138-2.048-.069-.17.022-.197-.128-.043-.24 1-.705 2.645-.502 2.836-.267.192.24-.053 1.89-.99 2.68-.143.123-.281.06-.218-.1.213-.53.687-1.72.463-2.003z"/></g></svg>
+                        <span>AWS</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Docker SVG -->
+                        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>file_type_docker</title><path d="M18.191,13.071H20.7v2.566H21.97a5.5,5.5,0,0,0,1.744-.292,4.462,4.462,0,0,0,.848-.383,3.149,3.149,0,0,1-.589-1.623,3.427,3.427,0,0,1,.616-2.416l.264-.305.314.253a4,4,0,0,1,1.575,2.538,3.837,3.837,0,0,1,2.913.271l.345.2-.181.354a3.629,3.629,0,0,1-3.648,1.74c-2.173,5.413-6.9,7.976-12.642,7.976A7.958,7.958,0,0,1,6.3,20.211l-.025-.043-.226-.459a7.28,7.28,0,0,1-.579-3.693l.035-.38H7.648V13.071h2.51v-2.51h5.02V8.051h3.012v5.02Z" style="fill:#3a4e55"/><path d="M26.324,14.021A3.311,3.311,0,0,0,24.906,11.2a3.072,3.072,0,0,0,.289,3.821,5.279,5.279,0,0,1-3.225,1.037H5.883a6.779,6.779,0,0,0,.667,3.737l.183.335a6.2,6.2,0,0,0,.379.569h0q.992.064,1.829.045h0a8.972,8.972,0,0,0,2.669-.389.193.193,0,1,1,.126.365c-.09.031-.184.061-.281.088h0a8.4,8.4,0,0,1-1.845.3c.044,0-.046.007-.046.007l-.082.007c-.291.016-.6.02-.925.02-.351,0-.7-.007-1.083-.026l-.01.007a7.882,7.882,0,0,0,6.063,2.41c5.56,0,10.276-2.465,12.365-8,1.482.152,2.906-.226,3.553-1.49a3.5,3.5,0,0,0-3.122-.022" style="fill:#00aada"/><path d="M26.324,14.021A3.311,3.311,0,0,0,24.906,11.2a3.072,3.072,0,0,0,.289,3.821,5.279,5.279,0,0,1-3.225,1.037H6.836a5.223,5.223,0,0,0,2.106,4.686h0a8.972,8.972,0,0,0,2.669-.389.193.193,0,1,1,.126.365c-.09.031-.184.061-.281.088h0a8.83,8.83,0,0,1-1.894.314L9.543,21.1c1.892.971,4.636.967,7.782-.241a21.868,21.868,0,0,0,9.1-6.889l-.1.048" style="fill:#27b9ec"/><path d="M5.913,17.732a6.431,6.431,0,0,0,.637,2.061l.183.335a6.2,6.2,0,0,0,.379.569q.992.064,1.829.045a8.972,8.972,0,0,0,2.669-.389.193.193,0,1,1,.126.365c-.09.031-.184.061-.281.088h0a8.826,8.826,0,0,1-1.891.307l-.1,0c-.291.016-.6.026-.922.026-.351,0-.709-.007-1.1-.026a7.913,7.913,0,0,0,6.076,2.413c4.76,0,8.9-1.807,11.3-5.8Z" style="fill:#088cb9"/><path d="M6.98,17.732a4.832,4.832,0,0,0,1.961,3.01,8.972,8.972,0,0,0,2.669-.389.193.193,0,1,1,.126.365c-.09.031-.184.061-.281.088h0a8.959,8.959,0,0,1-1.9.307c1.892.971,4.628.957,7.773-.252a20.545,20.545,0,0,0,5.377-3.13Z" style="fill:#039cc7"/><path d="M9.889,13.671h.172v1.813H9.889V13.671Zm-.33,0h.179v1.813H9.559V13.671Zm-.33,0h.179v1.813H9.23V13.671Zm-.33,0h.179v1.813H8.9V13.671Zm-.33,0h.179v1.813H8.57V13.671Zm-.323,0h.172v1.813H8.248V13.671Zm-.181-.181h2.175v2.176H8.066V13.49Z" style="fill:#00acd3"/><path d="M12.4,11.161h.172v1.813H12.4V11.161Zm-.33,0h.179v1.813H12.07V11.161Zm-.33,0h.179v1.813H11.74V11.161Zm-.33,0h.179v1.813H11.41V11.161Zm-.33,0h.178v1.813h-.178V11.161Zm-.323,0h.172v1.813h-.172V11.161Zm-.181-.181h2.176v2.176H10.577V10.979Z" style="fill:#00acd3"/><path d="M12.4,13.671h.172v1.813H12.4V13.671Zm-.33,0h.179v1.813H12.07V13.671Zm-.33,0h.179v1.813H11.74V13.671Zm-.33,0h.179v1.813H11.41V13.671Zm-.33,0h.178v1.813h-.178V13.671Zm-.323,0h.172v1.813h-.172V13.671Zm-.181-.181h2.176v2.176H10.577V13.49Z" style="fill:#26c2ee"/><path d="M14.909,13.671h.172v1.813h-.172V13.671Zm-.33,0h.179v1.813H14.58V13.671Zm-.33,0h.179v1.813H14.25V13.671Zm-.33,0H14.1v1.813h-.179V13.671Zm-.33,0h.179v1.813h-.179V13.671Zm-.323,0h.172v1.813h-.172V13.671Zm-.181-.181h2.176v2.176H13.087V13.49Z" style="fill:#00acd3"/><path d="M14.909,11.161h.172v1.813h-.172V11.161Zm-.33,0h.179v1.813H14.58V11.161Zm-.33,0h.179v1.813H14.25V11.161Zm-.33,0H14.1v1.813h-.179V11.161Zm-.33,0h.179v1.813h-.179V11.161Zm-.323,0h.172v1.813h-.172V11.161Zm-.181-.181h2.176v2.176H13.087V10.979Z" style="fill:#26c2ee"/><path d="M17.42,13.671h.172v1.813H17.42V13.671Zm-.33,0h.179v1.813H17.09V13.671Zm-.33,0h.179v1.813H16.76V13.671Zm-.33,0h.179v1.813h-.179V13.671Zm-.33,0h.179v1.813H16.1V13.671Zm-.323,0h.172v1.813h-.172V13.671ZM15.6,13.49h2.176v2.176H15.6V13.49Z" style="fill:#26c2ee"/><path d="M17.42,11.161h.172v1.813H17.42V11.161Zm-.33,0h.179v1.813H17.09V11.161Zm-.33,0h.179v1.813H16.76V11.161Zm-.33,0h.179v1.813h-.179V11.161Zm-.33,0h.179v1.813H16.1V11.161Zm-.323,0h.172v1.813h-.172V11.161Zm-.181-.181h2.176v2.176H15.6V10.979Z" style="fill:#00acd3"/><path d="M17.42,8.65h.172v1.813H17.42V8.65Zm-.33,0h.179v1.813H17.09V8.65Zm-.33,0h.179v1.813H16.76V8.65Zm-.33,0h.179v1.813h-.179V8.65Zm-.33,0h.179v1.813H16.1V8.65Zm-.323,0h.172v1.813h-.172V8.65ZM15.6,8.469h2.176v2.176H15.6V8.469Z" style="fill:#26c2ee"/><path d="M19.93,13.671H20.1v1.813H19.93V13.671Zm-.33,0h.178v1.813H19.6V13.671Zm-.33,0h.179v1.813h-.179V13.671Zm-.33,0h.179v1.813h-.179V13.671Zm-.33,0h.179v1.813h-.179V13.671Zm-.323,0h.172v1.813h-.172V13.671Zm-.181-.181h2.176v2.176H18.107V13.49Z" style="fill:#00acd3"/><path d="M12.616,19.193a.6.6,0,1,1-.6.6.6.6,0,0,1,.6-.6" style="fill:#d5eef2"/><path d="M12.616,19.363a.431.431,0,0,1,.156.029.175.175,0,1,0,.241.236.43.43,0,1,1-.4-.265" style="fill:#3a4e55"/><path d="M2,17.949H29.92c-.608-.154-1.923-.362-1.707-1.159-1.105,1.279-3.771.9-4.444.267-.749,1.087-5.111.674-5.415-.173-.939,1.1-3.85,1.1-4.789,0-.3.847-4.666,1.26-5.415.173-.673.631-3.338,1.012-4.444-.267.217.8-1.1,1.005-1.707,1.159" style="fill:#3a4e55"/><path d="M14.211,23.518a5.287,5.287,0,0,1-2.756-2.711,9.2,9.2,0,0,1-1.987.3q-.436.024-.917.025-.554,0-1.168-.033a7.942,7.942,0,0,0,6.145,2.43q.344,0,.683-.013" style="fill:#c0dbe1"/><path d="M12.007,21.773a5.206,5.206,0,0,1-.552-.966,9.2,9.2,0,0,1-1.987.3,6.325,6.325,0,0,0,2.539.664" style="fill:#d5eef2"/></svg>
+                        <span>Docker</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- GIT SVG -->
+                        <svg viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><g><path d="M251.172245,116.593517 L139.398753,4.82845302 C132.966433,-1.60948434 122.525852,-1.60948434 116.085106,4.82845302 L92.8753863,28.0381721 L122.317995,57.4807809 C129.16041,55.1690784 137.005593,56.7195763 142.460425,62.1744081 C147.940536,67.6629464 149.479799,75.5755422 147.111919,82.4404282 L175.487156,110.815665 C182.352042,108.450594 190.273064,109.98143 195.755985,115.472777 C203.418591,123.132574 203.418591,135.547794 195.755985,143.213209 C188.09057,150.878624 175.67535,150.878624 168.007126,143.213209 C162.243319,137.443783 160.81922,128.977839 163.737639,121.877008 L137.275245,95.4146135 L137.272436,165.052198 C139.140337,165.979126 140.904309,167.212221 142.460425,168.762719 C150.123031,176.422516 150.123031,188.837736 142.460425,196.508768 C134.79501,204.171375 122.374173,204.171375 114.719993,196.508768 C107.057387,188.837736 107.057387,176.422516 114.719993,168.762719 C116.613174,166.872347 118.804095,165.442631 121.141077,164.481996 L121.141077,94.1955625 C118.804095,93.2405457 116.615983,91.8192558 114.719993,89.9148396 C108.914052,84.1173254 107.518042,75.5980132 110.492639,68.4690928 L81.4713611,39.4421974 L4.83125614,116.076685 C-1.60949009,122.52024 -1.60949009,132.960821 4.83125614,139.398759 L116.604747,251.166631 C123.039876,257.604569 133.477648,257.604569 139.921203,251.166631 L251.172245,139.9184 C257.61018,133.477654 257.61018,123.031455 251.172245,116.593517" fill="#DE4C36"></path></g></svg>
+                        <span>GIT</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- MLOps SVG -->
+                        <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                        <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.288 9.463a4.856 4.856 0 0 0-4.336-2.3 4.586 4.586 0 0 0-3.343 1.767c.071.116.148.226.212.347l.879 1.652.134-.254a2.71 2.71 0 0 1 2.206-1.519 2.845 2.845 0 1 1 0 5.686 2.708 2.708 0 0 1-2.205-1.518L13.131 12l-1.193-2.26a4.709 4.709 0 0 0-3.89-2.581 4.845 4.845 0 1 0 0 9.682 4.586 4.586 0 0 0 3.343-1.767c-.071-.116-.148-.226-.212-.347l-.879-1.656-.134.254a2.71 2.71 0 0 1-2.206 1.519 2.855 2.855 0 0 1-2.559-1.369 2.825 2.825 0 0 1 0-2.946 2.862 2.862 0 0 1 2.442-1.374h.121a2.708 2.708 0 0 1 2.205 1.518l.7 1.327 1.193 2.26a4.709 4.709 0 0 0 3.89 2.581h.209a4.846 4.846 0 0 0 4.127-7.378z"/>
+                        </svg>
+                        <span>MLOps</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- ROS SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><path style="stroke:none;fill-rule:nonzero;fill:#22314e;fill-opacity:1" d="M33.875 22.45c0 6.898-5.418 12.488-12.102 12.488-6.683 0-12.101-5.59-12.101-12.489 0-6.894 5.418-12.484 12.101-12.484 6.684 0 12.102 5.59 12.102 12.484Zm0 42.55c0 6.895-5.418 12.484-12.102 12.484-6.683 0-12.101-5.59-12.101-12.484 0-6.895 5.418-12.484 12.101-12.484 6.684 0 12.102 5.59 12.102 12.484Zm0 42.55c0 6.895-5.418 12.485-12.102 12.485-6.683 0-12.101-5.59-12.101-12.484 0-6.895 5.418-12.489 12.101-12.489 6.684 0 12.102 5.594 12.102 12.489ZM76.102 65c0 6.895-5.418 12.484-12.102 12.484S51.898 71.894 51.898 65c0-6.895 5.418-12.484 12.102-12.484S76.102 58.106 76.102 65Zm0-42.55c0 6.898-5.418 12.488-12.102 12.488s-12.102-5.59-12.102-12.489c0-6.894 5.418-12.484 12.102-12.484s12.102 5.59 12.102 12.484ZM118.328 65c0 6.895-5.418 12.484-12.101 12.484-6.684 0-12.102-5.59-12.102-12.484 0-6.895 5.422-12.484 12.102-12.484 6.683 0 12.101 5.59 12.101 12.484Zm0-42.55c0 6.898-5.418 12.488-12.101 12.488-6.684 0-12.102-5.59-12.102-12.489 0-6.894 5.422-12.484 12.102-12.484 6.683 0 12.101 5.59 12.101 12.484Zm0 85.1c0 6.895-5.418 12.485-12.101 12.485-6.684 0-12.102-5.59-12.102-12.484 0-6.895 5.422-12.489 12.102-12.489 6.683 0 12.101 5.594 12.101 12.489Zm-42.226 0c0 6.895-5.418 12.485-12.102 12.485s-12.102-5.59-12.102-12.484c0-6.895 5.418-12.489 12.102-12.489s12.102 5.594 12.102 12.489Zm0 0"/></svg>
+                        <span>ROS</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- Keras SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new 0 0 128 128" viewBox="0 0 128 128"><path d="M128 128H0V0h128v128z" style="fill:#d00000"/><path d="M34.1 99.3c0 .1.1.2.1.3l2.2 2.2c.1.1.2.1.3.1h7.5c.1 0 .2-.1.3-.1l2.2-2.2c.1-.1.1-.2.1-.3V75.5c0-.1.1-.2.1-.3l9.5-9.1c.1-.1.2-.1.2 0l24.1 35.6c.1.1.2.1.3.1h10.6c.1 0 .2-.1.3-.2l1.9-3.7v-.3L65.7 56.9c-.1-.1 0-.2 0-.3l25.9-25.8c.1-.1.1-.2.1-.3V30c0-.1 0-.2-.1-.3l-1.5-3.4c0-.1-.1-.2-.2-.2H79.4c-.1 0-.2.1-.3.1L47 58.5c-.1.1-.1 0-.1-.1V28.9c0-.1-.1-.2-.1-.3l-2.2-2.3c-.1-.1-.2-.1-.3-.1h-7.6c-.1 0-.2.1-.3.1l-2.2 2.4c-.1.1-.1.2-.1.3v70.3z" style="fill:#fff"/></svg>
+                        <span>Keras</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- GNSS Sensor SVG -->
+                        <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                        <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z" stroke="#1C274C" stroke-width="1.5"/>
+                        <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="#1C274C" stroke-width="1.5"/>
+                        <path d="M2 12L4 12" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M20 12L22 12" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M12 4V2" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M12 22V20" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span>GNSS/GPS Sensor</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- IMU Sensor SVG -->
+                        <?xml version="1.0" standalone="no"?>
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+                        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                        width="1200.000000pt" height="1200.000000pt" viewBox="0 0 1200.000000 1200.000000"
+                        preserveAspectRatio="xMidYMid meet">
+
+                        <g transform="translate(0.000000,1200.000000) scale(0.100000,-0.100000)"
+                        fill="#000000" stroke="none">
+                        <path d="M5980 11627 c-49 -16 -133 -102 -148 -153 -28 -94 -8 -169 63 -239
+                        51 -52 102 -75 165 -75 124 0 240 116 240 240 0 63 -23 114 -75 165 -70 71
+                        -152 91 -245 62z"/>
+                        <path d="M6015 11031 c-11 -5 -31 -21 -45 -36 -25 -26 -25 -29 -25 -196 l0
+                        -169 33 -32 c28 -28 39 -33 82 -33 43 0 54 5 82 33 l33 32 0 170 0 170 -31 31
+                        c-33 33 -92 46 -129 30z"/>
+                        <path d="M5680 10434 c-19 -2 -87 -9 -150 -15 -540 -50 -1141 -246 -1646 -534
+                        -149 -86 -424 -272 -559 -380 -868 -693 -1451 -1658 -1639 -2715 -198 -1112
+                        65 -2256 737 -3215 318 -453 755 -878 1212 -1180 1029 -679 2208 -879 3370
+                        -570 1258 334 2373 1257 2950 2440 425 872 532 1806 314 2725 -124 523 -383
+                        1080 -713 1534 -289 396 -659 768 -1045 1049 -233 168 -411 277 -671 407 -462
+                        232 -914 369 -1440 436 -109 14 -639 27 -720 18z m746 -383 c1236 -167 2331
+                        -882 3010 -1966 81 -129 244 -450 299 -585 283 -706 355 -1436 214 -2160 -276
+                        -1413 -1374 -2633 -2789 -3099 -256 -85 -579 -153 -860 -183 -173 -18 -585
+                        -15 -765 6 -293 34 -533 87 -810 181 -985 331 -1818 1055 -2298 1994 -231 451
+                        -364 889 -423 1396 -24 203 -25 662 -1 855 85 685 304 1275 679 1827 267 392
+                        660 791 1043 1058 537 375 1190 622 1810 684 61 6 126 13 145 15 19 2 161 3
+                        315 1 210 -3 318 -9 431 -24z"/>
+                        <path d="M5980 9827 c-354 -132 -673 -1054 -810 -2332 -110 -1031 -87 -2256
+                        61 -3215 115 -752 304 -1359 514 -1655 58 -82 154 -171 212 -198 72 -32 154
+                        -29 221 7 58 32 143 115 198 191 253 355 473 1170 572 2123 l18 172 -178 0
+                        c-152 0 -178 -2 -178 -15 0 -38 -44 -439 -66 -605 -110 -826 -291 -1441 -450
+                        -1526 -33 -18 -35 -18 -68 0 -157 84 -341 707 -450 1526 -183 1370 -144 3026
+                        99 4235 117 582 265 945 385 945 139 0 314 -485 434 -1205 43 -258 116 -845
+                        116 -935 0 -19 7 -20 181 -20 l181 0 -6 28 c-2 15 -8 59 -11 97 -13 144 -47
+                        407 -81 613 -110 687 -282 1234 -482 1537 -58 88 -154 185 -212 215 -54 28
+                        -150 36 -200 17z"/>
+                        <path d="M5700 6900 l0 -180 368 0 c504 0 873 -17 1347 -61 953 -88 1771 -281
+                        1960 -463 66 -62 57 -112 -29 -174 -253 -182 -1101 -368 -2031 -447 -455 -38
+                        -1032 -60 -1382 -52 l-233 5 0 -178 0 -178 108 -7 c121 -9 709 0 1002 16 1421
+                        72 2512 346 2862 718 182 192 128 391 -153 574 -582 378 -1882 607 -3451 607
+                        l-368 0 0 -180z"/>
+                        <path d="M4760 7033 c-19 -2 -129 -12 -245 -23 -115 -12 -319 -36 -451 -55
+                        -998 -143 -1650 -396 -1810 -705 -58 -112 -33 -242 67 -354 100 -112 333 -248
+                        583 -340 400 -148 1049 -273 1706 -331 96 -8 192 -17 213 -19 l37 -4 0 183 0
+                        182 -97 7 c-569 40 -1273 154 -1678 271 -256 74 -403 142 -469 215 -40 45 -43
+                        58 -21 100 95 184 985 404 2000 495 99 8 199 18 223 21 l42 5 0 180 0 179 -32
+                        -2 c-18 0 -49 -3 -68 -5z"/>
+                        <path d="M5738 6473 l-38 -4 0 -349 0 -348 188 -7 c313 -13 766 14 1082 65
+                        377 61 650 182 650 288 0 165 -458 305 -1155 352 -141 9 -646 11 -727 3z m448
+                        -149 c157 -97 147 -329 -20 -416 -56 -30 -155 -31 -211 -1 -180 96 -175 349 9
+                        435 63 29 159 21 222 -18z"/>
+                        <path d="M4851 6349 c-117 -33 -232 -84 -286 -125 -155 -118 -17 -253 358
+                        -348 l57 -14 0 259 c0 201 -3 259 -12 258 -7 0 -60 -14 -117 -30z"/>
+                        <path d="M460 6347 c-19 -6 -58 -34 -85 -62 -71 -70 -91 -145 -63 -239 16 -55
+                        99 -138 154 -154 94 -28 169 -8 239 63 102 101 102 229 0 330 -70 71 -152 91
+                        -245 62z"/>
+                        <path d="M11380 6347 c-49 -16 -133 -102 -148 -153 -28 -94 -8 -169 63 -239
+                        51 -52 102 -75 165 -75 124 0 240 116 240 240 0 63 -23 114 -75 165 -70 71
+                        -152 91 -245 62z"/>
+                        <path d="M975 6231 c-44 -19 -70 -60 -70 -112 0 -42 5 -53 33 -81 l32 -33 170
+                        0 170 0 32 33 c28 28 33 39 33 82 0 43 -5 54 -33 82 l-32 33 -158 2 c-86 1
+                        -166 -1 -177 -6z"/>
+                        <path d="M10695 6231 c-44 -19 -70 -60 -70 -112 0 -42 5 -53 33 -81 l32 -33
+                        170 0 170 0 32 33 c28 28 33 39 33 82 0 43 -5 54 -33 82 l-32 33 -158 2 c-86
+                        1 -166 -1 -177 -6z"/>
+                        <path d="M6015 1431 c-11 -5 -31 -21 -45 -36 -25 -26 -25 -29 -25 -196 l0
+                        -169 33 -32 c28 -28 39 -33 82 -33 43 0 54 5 82 33 l33 32 0 170 0 170 -31 31
+                        c-33 33 -92 46 -129 30z"/>
+                        <path d="M5980 827 c-49 -16 -133 -102 -148 -153 -28 -94 -8 -169 63 -239 70
+                        -71 145 -91 239 -63 55 16 138 99 154 154 28 94 8 169 -63 239 -70 71 -152 91
+                        -245 62z"/>
+                        </g>
+                        </svg>
+                        <span>IMU Sensor</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- GNSS Sensor SVG -->
+                        <?xml version="1.0" encoding="iso-8859-1"?>
+                        <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                            viewBox="0 0 512.001 512.001" xml:space="preserve">
+                        <rect x="231.176" y="241.168" style="fill:#464655;" width="49.654" height="94.646"/>
+                        <path style="fill:#5B5D6E;" d="M448.106,155.369H63.894c-30.769,0-55.713,24.944-55.713,55.713l0,0
+                            c0,30.769,24.944,55.713,55.713,55.713h384.213c30.769,0,55.713-24.944,55.713-55.713l0,0
+                            C503.82,180.314,478.876,155.369,448.106,155.369z"/>
+                        <path style="fill:#717287;" d="M33.268,211.083L33.268,211.083c0-30.769,24.944-55.713,55.713-55.713H63.894
+                            c-30.769,0-55.713,24.944-55.713,55.713l0,0c0,30.769,24.944,55.713,55.713,55.713h25.088
+                            C58.212,266.796,33.268,241.852,33.268,211.083z"/>
+                        <circle style="fill:#464655;" cx="77.99" cy="211.085" r="21.727"/>
+                        <circle style="fill:#9BDC6E;" cx="157.855" cy="211.085" r="16.909"/>
+                        <circle style="fill:#464655;" cx="430.263" cy="211.085" r="16.909"/>
+                        <circle style="fill:#FF6465;" cx="225.428" cy="211.085" r="16.909"/>
+                        <path style="fill:#5B5D6E;" d="M329.912,330.08c-16.886-11.956-37.226-18.053-57.916-18.053h-31.992
+                            c-20.691,0-41.029,6.098-57.916,18.053c-10.394,7.358-19.055,16.505-19.055,26.552h185.934
+                            C348.967,346.585,340.306,337.439,329.912,330.08z"/>
+                        <path style="fill:#717287;" d="M209.358,330.08c16.886-11.956,37.226-18.053,57.916-18.053h-27.269
+                            c-20.691,0-41.029,6.098-57.916,18.053c-10.394,7.358-19.055,16.505-19.055,26.552h27.269
+                            C190.302,346.585,198.964,337.439,209.358,330.08z"/>
+                        <path d="M48.082,211.083c0,16.491,13.416,29.908,29.908,29.908s29.908-13.416,29.908-29.908s-13.416-29.908-29.908-29.908
+                            S48.082,194.592,48.082,211.083z M91.536,211.083c0,7.47-6.077,13.546-13.546,13.546c-7.47,0-13.546-6.077-13.546-13.546
+                            s6.077-13.546,13.546-13.546C85.459,197.537,91.536,203.613,91.536,211.083z"/>
+                        <path d="M157.852,236.173c13.835,0,25.09-11.256,25.09-25.09c0-13.835-11.254-25.09-25.09-25.09s-25.091,11.256-25.091,25.09
+                            S144.017,236.173,157.852,236.173z M157.852,202.355c4.812,0,8.728,3.916,8.728,8.728s-3.916,8.728-8.728,8.728
+                            c-4.814,0-8.729-3.916-8.729-8.728C149.123,206.269,153.038,202.355,157.852,202.355z"/>
+                        <path d="M455.356,211.083c0-13.835-11.254-25.09-25.09-25.09s-25.09,11.256-25.09,25.09s11.254,25.09,25.09,25.09
+                            S455.356,224.917,455.356,211.083z M421.538,211.083c0-4.814,3.916-8.728,8.728-8.728s8.728,3.916,8.728,8.728
+                            s-3.916,8.728-8.728,8.728S421.538,215.895,421.538,211.083z"/>
+                        <path d="M200.336,211.083c0,13.834,11.256,25.09,25.091,25.09s25.09-11.256,25.09-25.09c0-13.835-11.254-25.09-25.09-25.09
+                            S200.336,197.248,200.336,211.083z M234.155,211.083c0,4.812-3.916,8.728-8.728,8.728c-4.814,0-8.729-3.916-8.729-8.728
+                            c0-4.814,3.916-8.728,8.729-8.728C230.239,202.355,234.155,206.269,234.155,211.083z"/>
+                        <path d="M141.764,163.55h306.343c26.209,0,47.532,21.323,47.532,47.533c0,26.209-21.323,47.532-47.532,47.532H397.66
+                            c-4.519,0-8.181,3.663-8.181,8.181s3.662,8.181,8.181,8.181h50.448c35.232,0,63.894-28.663,63.894-63.895
+                            c0-35.231-28.662-63.894-63.894-63.894H141.764c-4.519,0-8.181,3.663-8.181,8.181S137.245,163.55,141.764,163.55z"/>
+                        <path d="M63.895,274.977h159.098v30.142c-16.567,2.512-32.106,8.708-45.632,18.284c-14.935,10.575-22.508,21.754-22.508,33.229
+                            c0,4.518,3.662,8.181,8.181,8.181h185.935c4.519,0,8.181-3.663,8.181-8.181c0-10.578-6.452-20.926-19.177-30.757
+                            c-3.574-2.762-8.712-2.104-11.475,1.473c-2.763,3.576-2.104,8.713,1.473,11.476c4.302,3.324,7.563,6.563,9.72,9.629H174.333
+                            c2.619-3.725,6.84-7.7,12.482-11.695c13.108-9.28,28.496-14.796,44.907-16.187c0.047-0.003,0.094,0,0.142-0.004
+                            c2.8-0.237,5.539-0.358,8.14-0.358h31.993c2.6,0,5.339,0.12,8.14,0.358c0.011,0.001,0.022,0,0.033,0.001
+                            c6.858,0.582,13.596,1.888,20.117,3.927c4.311,1.348,8.901-1.056,10.249-5.368c1.348-4.313-1.055-8.901-5.368-10.249
+                            c-5.281-1.65-10.681-2.896-16.16-3.736v-30.163h75.927c4.519,0,8.181-3.663,8.181-8.181c0-4.518-3.662-8.181-8.181-8.181h-84.108
+                            h-49.654H63.895c-26.21-0.002-47.533-21.326-47.533-47.534s21.323-47.532,47.533-47.532h45.147c4.519,0,8.181-3.663,8.181-8.181
+                            s-3.662-8.181-8.181-8.181H63.895C28.663,147.188,0,175.851,0,211.083S28.663,274.977,63.895,274.977z M239.355,274.977h33.292
+                            v28.871c-0.217-0.001-0.433-0.002-0.65-0.002h-31.993c-0.216,0-0.432,0-0.65,0.002v-28.871H239.355z"/>
+                        </svg>
+                        <span>Mono & Stereo Camera</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <!-- LiDAR Sensor SVG -->
+                        <?xml version="1.0" standalone="no"?>
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+                        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                        width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
+                        preserveAspectRatio="xMidYMid meet">
+
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                        fill="#000000" stroke="none">
+                        <path d="M2330 4709 c-313 -32 -656 -147 -927 -310 -292 -177 -575 -460 -752
+                        -752 -521 -864 -408 -1973 276 -2698 67 -71 99 -87 136 -68 71 38 64 79 -31
+                        186 -157 178 -251 316 -342 504 -386 802 -225 1751 405 2385 487 490 1185 700
+                        1875 563 450 -89 889 -349 1182 -698 466 -557 610 -1299 384 -1986 -95 -287
+                        -231 -521 -444 -763 -60 -68 -82 -100 -82 -120 1 -48 49 -88 95 -76 50 12 242
+                        241 352 417 490 793 450 1783 -105 2531 -96 130 -308 342 -438 438 -313 232
+                        -641 369 -1034 433 -118 19 -423 27 -550 14z"/>
+                        <path d="M2375 4154 c-536 -81 -945 -335 -1219 -756 -393 -605 -351 -1406 102
+                        -1968 72 -90 145 -160 167 -160 25 0 72 27 79 45 15 41 4 66 -73 155 -100 115
+                        -169 218 -231 345 -156 319 -195 664 -115 1018 113 502 506 933 995 1091 190
+                        62 252 71 485 71 183 0 223 -3 314 -23 287 -65 525 -191 730 -387 233 -224
+                        372 -472 443 -786 20 -91 23 -131 23 -314 0 -166 -4 -228 -18 -295 -60 -277
+                        -178 -512 -361 -722 -83 -94 -93 -125 -57 -169 13 -17 29 -23 57 -23 34 0 44
+                        7 105 73 205 222 354 521 416 836 28 141 25 484 -5 625 -147 681 -640 1175
+                        -1317 1320 -78 17 -143 22 -295 25 -107 2 -208 1 -225 -1z"/>
+                        <path d="M2365 3595 c-247 -47 -472 -168 -641 -347 -193 -204 -291 -439 -301
+                        -723 -8 -204 25 -368 108 -542 72 -152 221 -333 272 -333 40 0 62 15 77 49 15
+                        37 9 49 -83 162 -306 379 -292 917 32 1272 119 129 305 241 481 289 73 20 108
+                        23 255 23 197 0 265 -15 420 -90 250 -121 443 -358 516 -632 30 -113 37 -329
+                        14 -443 -34 -168 -116 -332 -229 -457 -65 -71 -74 -113 -33 -151 41 -39 74
+                        -29 142 41 179 183 281 429 292 707 10 267 -56 495 -207 714 -60 87 -210 235
+                        -293 290 -91 60 -238 125 -344 153 -125 32 -353 41 -478 18z"/>
+                        <path d="M2470 2910 c-171 -36 -313 -186 -342 -363 -34 -207 97 -420 299 -484
+                        l53 -17 0 -583 0 -583 -485 0 c-333 0 -492 -3 -508 -11 -41 -19 -47 -49 -47
+                        -229 0 -180 6 -210 47 -229 34 -16 2112 -16 2146 0 41 19 47 49 47 229 0 180
+                        -6 210 -47 229 -16 8 -175 11 -508 11 l-485 0 0 583 0 583 53 17 c236 75 363
+                        339 276 573 -42 110 -144 212 -255 254 -65 24 -179 33 -244 20z m219 -184 c53
+                        -27 90 -66 124 -130 30 -57 30 -173 -1 -232 -56 -109 -134 -158 -252 -158 -80
+                        -1 -125 16 -187 68 -68 57 -107 185 -84 273 25 92 126 192 210 207 54 9 141
+                        -4 190 -28z m831 -2086 l0 -80 -960 0 -960 0 0 80 0 80 960 0 960 0 0 -80z"/>
+                        <path d="M2482 2610 c-130 -79 -74 -280 78 -280 85 0 150 65 150 150 0 85 -65
+                        150 -150 150 -27 0 -58 -8 -78 -20z"/>
+                        </g>
+                        </svg>
+
+                        <span>LiDAR Sensor</span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section id="Core Competencies" class="section-container fade-in-on-scroll">
+                <h2 class="section-title text-center mb-8">Core Competencies</h2>
+                <div class="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-5 gap-12 justify-items-center">
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                        <svg width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none"><circle cx="34.52" cy="11.43" r="5.82"/><circle cx="53.63" cy="31.6" r="5.82"/><circle cx="34.52" cy="50.57" r="5.82"/><circle cx="15.16" cy="42.03" r="5.82"/><circle cx="15.16" cy="19.27" r="5.82"/><circle cx="34.51" cy="29.27" r="4.7"/><line x1="20.17" y1="16.3" x2="28.9" y2="12.93"/><line x1="38.6" y1="15.59" x2="49.48" y2="27.52"/><line x1="50.07" y1="36.2" x2="38.67" y2="46.49"/><line x1="18.36" y1="24.13" x2="30.91" y2="46.01"/><line x1="20.31" y1="44.74" x2="28.7" y2="48.63"/><line x1="17.34" y1="36.63" x2="31.37" y2="16.32"/><line x1="20.52" y1="21.55" x2="30.34" y2="27.1"/><line x1="39.22" y1="29.8" x2="47.81" y2="30.45"/><line x1="34.51" y1="33.98" x2="34.52" y2="44.74"/></svg>
+                        <span>Artificial Intelligence</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                        <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;}</style></defs><title>machine-learning</title><path d="M16,25a6.9908,6.9908,0,0,1-5.833-3.1287l1.666-1.1074a5.0007,5.0007,0,0,0,8.334,0l1.666,1.1074A6.9908,6.9908,0,0,1,16,25Z"/><path d="M20,14a2,2,0,1,0,2,2A1.9806,1.9806,0,0,0,20,14Z"/><path d="M12,14a2,2,0,1,0,2,2A1.9806,1.9806,0,0,0,12,14Z"/><path d="M30,16V14H28V10a4.0045,4.0045,0,0,0-4-4H22V2H20V6H12V2H10V6H8a4.0045,4.0045,0,0,0-4,4v4H2v2H4v5H2v2H4v3a4.0045,4.0045,0,0,0,4,4H24a4.0045,4.0045,0,0,0,4-4V23h2V21H28V16ZM26,26a2.0023,2.0023,0,0,1-2,2H8a2.0023,2.0023,0,0,1-2-2V10A2.0023,2.0023,0,0,1,8,8H24a2.0023,2.0023,0,0,1,2,2Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>
+                        <span>Machine Learning</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Sensor nodes -->
+                        <circle cx="10" cy="20" r="6" fill="#6366f1"/>
+                        <circle cx="10" cy="50" r="6" fill="#6366f1"/>
+                        <circle cx="10" cy="80" r="6" fill="#6366f1"/>
+
+                        <!-- Dashed arrows to fusion node -->
+                        <path d="M16 20 L50 50" stroke="#6366f1" stroke-width="2" stroke-dasharray="4 2" stroke-linecap="round"/>
+                        <path d="M16 50 L50 50" stroke="#6366f1" stroke-width="2" stroke-dasharray="4 2" stroke-linecap="round"/>
+                        <path d="M16 80 L50 50" stroke="#6366f1" stroke-width="2" stroke-dasharray="4 2" stroke-linecap="round"/>
+
+                        <!-- Fusion core (double ring) -->
+                        <circle cx="50" cy="50" r="8" fill="white" stroke="#0f172a" stroke-width="3"/>
+                        <circle cx="50" cy="50" r="3" fill="#0f172a"/>
+
+                        <!-- Output arrow -->
+                        <path d="M58 50 L100 50" stroke="#10b981" stroke-width="3" marker-end="url(#arrowhead)" />
+
+                        <!-- Arrowhead marker definition -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L6,3 Z" fill="#10b981" />
+                            </marker>
+                        </defs>
+                        </svg>
+                        <span>Sensor Fusion</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <?xml version="1.0" encoding="iso-8859-1"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                            viewBox="0 0 512 512" xml:space="preserve">
+                        <circle style="fill:#EEA0B6;" cx="256" cy="115.341" r="115.341"/>
+                        <path style="fill:#20AAB0;" d="M371.341,149.099H140.659c-18.644,0-33.758-15.115-33.758-33.758s15.115-33.758,33.758-33.758
+                            h230.681c18.644,0,33.758,15.115,33.758,33.758S389.984,149.099,371.341,149.099z"/>
+                        <path style="fill:#DA5B82;" d="M256,194.11c-7.556,0-15.034-1.059-22.224-3.149c-4.476-1.3-7.051-5.982-5.75-10.459
+                            c1.301-4.475,5.985-7.05,10.458-5.749c11.321,3.288,23.714,3.288,35.031,0c4.476-1.302,9.16,1.274,10.459,5.749
+                            c1.3,4.475-1.274,9.16-5.749,10.459C271.034,193.051,263.557,194.11,256,194.11z"/>
+                        <path style="fill:#A0DDDF;" d="M275.692,282.435L256,304.105l-19.692-21.671c-36.643,3.104-70.844,14.78-100.583,33.03L256,474.681
+                            c0,0,120.275-159.216,120.275-159.229C346.536,297.214,312.336,285.538,275.692,282.435z"/>
+                        <polygon style="fill:#06484A;" points="236.308,315.358 223.549,493.179 288.451,493.179 275.692,315.358 256,303.017 "/>
+                        <path style="fill:#086063;" d="M275.692,282.435c-6.492-0.55-13.059-0.835-19.692-0.835c-6.633,0-13.201,0.286-19.692,0.835v32.923
+                            h39.385V282.435z"/>
+                        <path style="fill:#14858A;" d="M376.281,315.461L256,435.741L135.719,315.461C69.667,355.971,25.6,428.835,25.6,512h460.8
+                            C486.4,428.835,442.333,355.971,376.281,315.461z"/>
+                        <path style="fill:#086063;" d="M337.582,123.78H174.418c-4.661,0-8.44-3.778-8.44-8.44s3.779-8.44,8.44-8.44h163.165
+                            c4.662,0,8.44,3.778,8.44,8.44S342.244,123.78,337.582,123.78z"/>
+                        </svg>
+                        <span>Computer Vision</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <span class="skill-emoji">🗣️</span>
+                        <span>LLMs & NLP</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <?xml version="1.0" standalone="no"?>
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+                        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                        width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
+                        preserveAspectRatio="xMidYMid meet">
+
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                        fill="#000000" stroke="none">
+                        <path d="M2545 4605 c-63 -34 -98 -80 -110 -146 -14 -75 37 -171 105 -199 l30
+                        -12 0 -172 c0 -187 7 -216 55 -216 48 0 55 29 55 216 l0 172 30 12 c42 17 87
+                        72 100 121 21 78 -6 152 -75 205 -47 35 -142 45 -190 19z m124 -100 c79 -40
+                        46 -165 -44 -165 -39 0 -65 18 -81 55 -17 43 -3 90 35 110 34 18 55 18 90 0z"/>
+                        <path d="M1258 4270 c-47 -25 -83 -73 -98 -128 -22 -85 33 -191 117 -223 33
+                        -12 105 -11 140 2 36 13 88 64 104 100 l11 29 174 0 174 0 127 -190 c111 -167
+                        129 -190 153 -190 32 0 50 17 50 47 0 22 -249 409 -274 425 -6 4 -99 8 -206 8
+                        l-195 0 -20 37 c-11 20 -37 50 -58 67 -50 40 -142 47 -199 16z m133 -90 c29
+                        -16 51 -67 44 -101 -22 -101 -175 -85 -175 20 0 66 73 111 131 81z"/>
+                        <path d="M3891 4269 c-30 -15 -54 -39 -74 -71 l-30 -48 -198 0 -199 0 -141
+                        -212 c-126 -188 -141 -214 -133 -237 8 -21 16 -26 44 -26 34 0 38 4 160 187
+                        l125 187 172 1 173 0 19 -37 c35 -69 93 -103 174 -103 187 0 256 243 99 350
+                        -49 35 -133 38 -191 9z m144 -101 c15 -14 28 -38 32 -60 5 -32 1 -41 -25 -68
+                        -19 -18 -41 -30 -57 -30 -87 0 -126 90 -66 151 36 36 79 38 116 7z"/>
+                        <path d="M2260 3516 c-225 -131 -320 -192 -332 -212 -16 -26 -18 -64 -18 -399
+                        0 -347 1 -372 19 -401 21 -34 45 -49 436 -274 202 -116 234 -131 266 -127 46
+                        6 623 337 667 383 l32 34 0 377 c0 352 -1 380 -19 409 -14 23 -96 75 -333 212
+                        -281 163 -320 182 -359 181 -38 0 -84 -24 -359 -183z m633 -67 c144 -83 279
+                        -162 300 -175 l37 -24 0 -349 0 -349 -297 -172 c-164 -95 -303 -173 -309 -173
+                        -14 0 -596 333 -606 347 -5 6 -7 166 -5 356 l2 345 295 171 c162 95 301 172
+                        308 173 7 1 131 -67 275 -150z"/>
+                        <path d="M2890 3231 c-55 -15 -59 -98 -6 -122 32 -15 93 -3 106 21 34 63 -25
+                        123 -100 101z"/>
+                        <path d="M2453 3188 c-21 -23 -218 -438 -229 -483 -7 -29 26 -65 59 -65 35 0
+                        62 25 81 74 l18 46 127 0 127 0 21 -50 c23 -55 55 -77 98 -66 14 4 30 17 36
+                        30 12 25 12 25 -136 346 -78 169 -94 190 -145 190 -25 0 -43 -7 -57 -22z m97
+                        -227 c16 -41 30 -78 30 -82 0 -11 -140 -12 -140 -1 -1 18 66 170 72 164 4 -4
+                        21 -40 38 -81z"/>
+                        <path d="M2869 3023 c-11 -12 -14 -56 -14 -180 0 -163 0 -165 25 -185 17 -14
+                        33 -18 55 -14 51 10 55 25 55 201 0 144 -2 164 -18 178 -24 22 -85 22 -103 0z"/>
+                        <path d="M998 2504 c-54 -29 -58 -50 -58 -327 0 -183 3 -256 12 -265 16 -16
+                        65 -15 75 1 4 6 10 122 13 257 l5 245 383 5 c326 4 384 7 392 20 14 22 12 47
+                        -6 64 -13 14 -64 16 -402 16 -323 -1 -392 -3 -414 -16z"/>
+                        <path d="M3488 2509 c-21 -12 -24 -62 -5 -78 9 -7 127 -12 368 -13 l354 -3 3
+                        -294 c2 -257 4 -297 19 -313 18 -21 53 -24 71 -6 19 19 17 620 -3 657 -30 59
+                        -48 61 -437 61 -221 0 -360 -4 -370 -11z"/>
+                        <path d="M2586 1918 c-13 -19 -16 -60 -16 -245 l0 -222 -36 -17 c-73 -35 -117
+                        -131 -96 -210 17 -63 38 -91 90 -122 63 -36 131 -36 194 0 51 31 71 56 89 117
+                        24 79 -21 180 -95 215 l-36 17 0 222 c0 242 -5 267 -55 267 -13 0 -31 -10 -39
+                        -22z m103 -592 c31 -31 31 -89 0 -122 -51 -55 -151 -16 -151 59 0 85 90 122
+                        151 63z"/>
+                        <path d="M455 1727 c-56 -22 -74 -37 -102 -85 l-28 -47 -3 -414 c-2 -271 1
+                        -431 8 -464 13 -64 51 -114 104 -138 38 -17 76 -19 611 -19 532 0 573 2 610
+                        19 51 23 91 70 105 122 7 26 10 188 8 472 l-3 433 -27 41 c-15 22 -44 51 -65
+                        64 l-38 24 -575 2 c-425 1 -583 -1 -605 -10z m1182 -120 l28 -27 3 -408 c2
+                        -274 0 -419 -8 -444 -20 -70 -3 -68 -619 -68 l-549 0 -31 26 -31 26 0 432 c0
+                        466 0 464 54 486 11 5 270 8 573 7 l553 -2 27 -28z"/>
+                        <path d="M1146 1530 c-66 -20 -111 -90 -103 -158 16 -143 193 -183 274 -62 73
+                        108 -44 259 -171 220z m85 -121 c18 -34 -3 -69 -41 -69 -22 0 -33 6 -41 24
+                        -16 35 3 66 41 66 20 0 33 -7 41 -21z"/>
+                        <path d="M793 1291 c-11 -10 -77 -125 -147 -255 -100 -184 -127 -242 -122
+                        -261 7 -27 45 -42 70 -28 9 5 67 103 129 217 63 114 117 208 121 208 5 0 72
+                        -97 150 -214 107 -162 146 -214 164 -216 31 -5 52 14 52 46 0 26 -284 471
+                        -322 505 -26 22 -69 22 -95 -2z"/>
+                        <path d="M1333 1150 c-12 -5 -49 -42 -82 -82 -48 -57 -61 -79 -59 -102 6 -66
+                        65 -59 121 14 21 28 42 50 45 50 4 0 27 -30 51 -65 61 -89 75 -101 109 -89 50
+                        17 42 53 -38 165 -41 58 -82 104 -97 110 -13 5 -25 9 -26 8 -1 0 -12 -4 -24
+                        -9z"/>
+                        <path d="M4081 1690 c-131 -28 -274 -114 -351 -211 -92 -117 -134 -236 -134
+                        -384 1 -85 5 -113 30 -185 56 -160 161 -279 309 -350 95 -45 159 -60 263 -60
+                        158 0 304 61 417 174 324 325 188 863 -252 1002 -59 18 -222 26 -282 14z m211
+                        -104 c103 -22 175 -61 249 -135 102 -102 149 -213 149 -350 0 -92 -17 -159
+                        -61 -240 -96 -182 -309 -287 -512 -253 -188 32 -348 172 -401 351 -20 67 -21
+                        198 -2 267 22 85 74 170 142 233 72 68 143 106 235 125 83 19 119 19 201 2z"/>
+                        <path d="M4077 1332 c-15 -16 -17 -47 -17 -231 0 -127 4 -220 10 -232 21 -38
+                        59 -23 215 86 153 108 181 139 156 169 -7 9 -57 47 -110 84 -218 156 -223 158
+                        -254 124z m166 -186 c31 -21 57 -42 57 -47 0 -7 -126 -99 -135 -99 -3 0 -5 45
+                        -5 100 0 79 3 99 13 93 7 -4 38 -26 70 -47z"/>
+                        </g>
+                        </svg>
+
+                        <span>Generative AI</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <span class="skill-emoji">🏗️</span>
+                        <span>ML Pipeline Design</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <span class="skill-emoji">🗄️</span>
+                        <span>Data Architecture</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <span class="skill-emoji">🚀</span>
+                        <span>Model Deployment</span>
+                    </div>
+                    <div class="skill-card shadow-lg hover:scale-105 transition-transform duration-300">
+                        <span class="skill-emoji">🔁</span>
+                        <span>CI/CD, DevOps</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience" class="section-container fade-in-on-scroll">
+                 <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <h2 class="section-title md:col-span-1">Experience
+                        <span class="block text-xs text-[var(--color-subtle-text)] font-normal mt-1 opacity-70">
+                            Hover over Experience to read details
+                        </span>
+                    </h2>
+                    <div class="md:col-span-2">
+                        <ul class="timeline">
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">Research Engineer (Master Thesis)</h3>
+                                    <span class="timeline-date">Feb 2024 - Aug 2024</span>
+                                </div>
+                                <p class="timeline-company">Hella Forvia</p>
+                                <div class="timeline-details">
+                                    <ul class="list-disc pl-5 space-y-2 text-[var(--color-subtle-text)] text-sm">
+                                        <li>Developed a high-precision vehicle localization architecture achieving accuracy under 0.5m by implementing UKF-based Sensor Fusion with GPS/GNSS, IMU, and camera data</li>
+                                        <li>Designed a Deep Learning virtual sensor framework to simulate GPS data during signal loss.</li>
+                                        <li>Developed trajectory prediction models using vehicle telemetry and road topology data, enhancing localization robustness.</li>
+                                        <li>Integrated 3D ASAM OpenDRIVE map data to implement lane-level constraints, improving localization accuracy.</li>
+                                        <li>Applied signal processing and ML techniques for sensor data analysis to detect patterns and anomalies in driving behavior.</li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">Engineering Intern</h3>
+                                    <span class="timeline-date">Aug 2023 - Feb 2024</span>
+                                </div>
+                                <p class="timeline-company">Hella Forvia</p>
+                                <div class="timeline-details">
+                                    <ul class="list-disc pl-5 space-y-2 text-[var(--color-subtle-text)] text-sm">
+                                        <li>Developed automated map parsing system for converting OpenDRIVE map data into MATLAB structures, enabling rapid prototyping.</li>
+                                        <li>Built road network graphs using data from OpenDRIVE maps.</li>
+                                        <li>Contributed to 3D object detection and tracking systems using state-of-the-art YOLOv8 models.</li>
+                                        <li>Calibrated stereo and monocular cameras using Chessboard images.</li>
+                                        <li>Created simulation integrating OpenDRIVE maps with MATLAB/Simulink.</li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">Graphic Designer</h3>
+                                    <span class="timeline-date">Apr 2020 - Aug 2021</span>
+                                </div>
+                                <p class="timeline-company">Freelance</p>
+                                <div class="timeline-details">
+                                    <ul class="list-disc pl-5 space-y-2 text-[var(--color-subtle-text)] text-sm">
+                                        <li>Designed and delivered a wide range of digital assets including logos, social media content, and marketing materials for various clients.</li>
+                                        <li>Managed client communication and project timelines, ensuring timely delivery and client satisfaction.</li>
+                                        <li>Utilized Adobe Creative Suite (Photoshop, Illustrator) to produce high-quality visual designs.</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">Graduate Engineer Trainee</h3>
+                                    <span class="timeline-date">Jul 2019 - Oct 2019</span>
+                                </div>
+                                <p class="timeline-company">Sodecia India</p>
+                                <div class="timeline-details">
+                                    <ul class="list-disc pl-5 space-y-2 text-[var(--color-subtle-text)] text-sm">
+                                        <li>Analyzed inventory and sales data to plan and optimize production schedules, reducing material waste.</li>
+                                        <li>Assisted in process improvement initiatives on the production line, contributing to an increase in efficiency.</li>
+                                        <li>Gained hands-on experience in manufacturing operations and quality control procedures.</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="education" class="section-container fade-in-on-scroll">
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <h2 class="section-title md:col-span-1">Education
+                        <span class="block text-xs text-[var(--color-subtle-text)] font-normal mt-1 opacity-70">
+                            Hover over Education to read details
+                        </span>
+                    </h2>
+                    <div class="md:col-span-2">
+                        <ul class="timeline">
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">M.Sc. Mechanical Engineering ISE (Mechatronics profile)</h3>
+                                    <span class="timeline-date">Oct 2021 - Aug 2024</span>
+                                </div>
+                                <p class="timeline-company">Universität Duisburg-Essen | GPA - 1.9</p>
+                                <div class="timeline-details">
+                                    <ul class="list-disc pl-5 space-y-2 text-[var(--color-subtle-text)] text-sm">
+                                        <li>Specialized in Robotics, Automation, Artificial Intelligence, and Control Systems.</li>
+                                        <p>Relevant Coursework:</p>
+                                        <li>Control Theory, Model Predictive Control, Vision Based Control.</li>
+                                        <li>Machine Learning, Computer Vision, AI and Reinforcement Learning.</li>
+                                        <li>Mathematical Optimization, Kinematics and Dynamics of machines, robots and vehicles.</li>
+                                        <li>Functional Safety, Computer Aided Engineering, Model Based Systems Engineering (MBSE)</li>
+                                        <li>Sensors, Signal Processing, Analog / Digital Filters, Digital / Fast Fourier Transform (DFT/FFT), Kalman Filter, Particle Filter.</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">B.E. Mechanical Engineering</h3>
+                                    <span class="timeline-date">Aug 2015 - May 2019</span>
+                                </div>
+                                <p class="timeline-company">Gujarat Technological University | GPA - 2.0</p>
+                                <div class="timeline-details">
+                                    <ul class="list-disc pl-5 space-y-2 text-[var(--color-subtle-text)] text-sm">
+                                        <li>Thesis Project: " City Efficient Cars - Redesigning cars for reducing space occupied in the cities while in idle/parked condition".</li>
+                                        <p>Relevant Coursework:</p>
+                                        <li>Kinematics and Dynamics of Machines, Robots</li>
+                                        <li>Fluid Mechanics, Heat Transfer, Thermodynamics.</li>
+                                        <li>Manufacturing Processes, Materials Science, Engineering Drawings.</li>
+                                        <li>Computer Aided Design (CAD), Computer Aided Manufacturing (CAM).</li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-item-header">
+                                    <h3 class="timeline-title">Highschool</h3>
+                                    <span class="timeline-date">Jul 2013 - Mar 2015</span>
+                                </div>
+                                <p class="timeline-company">Calorx Public School</p>
+                                <div class="timeline-details">
+                                    
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="thesis" class="section-container fade-in-on-scroll">
+                 <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <h2 class="section-title md:col-span-1">Master Thesis</h2>
+                    <div class="md:col-span-2">
+                        <h3 class="text-xl font-bold mb-2">Ego-vehicle self-localization and trajectory identification using GPS-IMU sensor-fusion, Stereo Cameras and OpenDRIVE maps.</h3>
+                        <p class="timeline-company">Thesis Grade - 1.1</p>
+                        <details class="mb-6">
+                            <summary class="cursor-pointer text-lg text-[var(--color-subtle-text)] font-semibold mb-2">
+                                Thesis Overview (click to expand)
+                            </summary>
+                            <div class="mt-3">
+                                <p class="text-lg text-[var(--color-subtle-text)] mb-6">
+                                The goal of the thesis was to develop a robust and accurate LOCALIZATION and TRAJECTORY prediction system for an autonomous driving vehicle. To achieve this goal, data from GNSS and IMU sensors was fused together using <a href="https://de.mathworks.com/help/control/ug/nonlinear-state-estimation-using-unscented-kalman-filter.html" target="_blank" class="underline">Unscented Kalman Filter</a> to find the location of the vehicle on Earth. Additionally, <a href="https://www.asam.net/standards/detail/opendrive/" target="_blank" class="underline">3D ASAM OpenDRIVE maps</a> were used to fin the exact location of the car in a lane on the road.
+                                </p>
+                                <p class="text-lg text-[var(--color-subtle-text)] mb-2">
+                                As shown in the workflow picture below, the system used 2 inputs:
+                                </p>
+                                <ul class="list-disc pl-5 mb-2 text-lg text-[var(--color-subtle-text)]">
+                                <li>GNSS and IMU sensor data</li>
+                                <li>Map data from 3D ASAM OpenDRIVE maps</li>
+                                </ul>
+                                <p class="text-lg text-[var(--color-subtle-text)] mb-6">
+                                On one side, the GNSS and IMU sensor data were fused together using UKF and on the other side, the map data was converted into Matlab structure for its quick use.
+                                </p>
+                            </div>
+                            </details>
+
+                        <div class="carousel-container mb-6">
+                            <div class="carousel-slides">
+                                <div class="carousel-slide"><img src="https://github.com/AliVaghjipur/alizainul-cv/raw/1d4f1a1286e55637622ab8df18350de631893d18/images/GPS%20%2B%20IMU%20data%20from%20the%20iMAR%20sensor_squeezed.png" alt="Thesis image 1"></div>
+                                <div class="carousel-slide"><img src="https://github.com/AliVaghjipur/alizainul-cv/raw/6245fb91bec64b4a89d347377c78eb1eef933ec9/images/Screenshot%202025-06-28%20153722.png" alt="Thesis image 2"></div>
+                                <div class="carousel-slide"><img src="https://github.com/AliVaghjipur/alizainul-cv/raw/6245fb91bec64b4a89d347377c78eb1eef933ec9/images/TrajectoryPrediction.png" alt="Thesis image 3"></div>
+                            </div>
+                            <button class="carousel-button prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-button next"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+
+                        <h4 class="font-semibold mb-2">Key Highlights: </h4>
+                        <ul class="list-disc pl-5 mb-2 text-lg text-[var(--color-subtle-text)]">
+                            <li>With the use of Deep Learning Models, combined with Map Data and Vehicle Dynamics and Telemetry Data, the system was able to maintain robust localization and trajectory prediction, even during GNSS signal outages.</li>
+                            <li>This work shows how, even with less resources and inputs, robust systems can be built for safety critical systems.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="section-container fade-in-on-scroll">
+            <!-- Centered title -->
+            <h2 class="section-title text-center mb-8 w-full">Projects</h2>
+            <!-- Projects grid, centered tiles -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">Stable Diffusion from Scratch</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">A complete PyTorch implementation of Stable Diffusion for text-to-image generation.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/StableDiffusion_from_Scratch" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">LiDAR-Camera Fusion</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">Sensor fusion pipeline using the KITTI dataset and YOLOv5 for robust 3D object detection.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur?tab=repositories" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">Video Summarizer AI Agent</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">A Streamlit app using Gemini AI to summarize and analyze video content from various sources.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/Video-Summarizer-Agent" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">Behavioral Cloning</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">Using Deep Neural Networks to clone human driver behavior for autonomous control.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/BehavioralCloning" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">Advanced Lane Detection</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">Development of an effective lane detection algorithm for various driving conditions, including sharp curves and high-contrast lighting.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/Advanced_Lane_detection" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">Traffic Signs Classification</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">A neural network model to classify 42 different classes of traffic signs from the German traffic signs dataset.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/TrafficSigns" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">A Star Algorithm</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">A simple Python code demonstrating the A* pathfinding algorithm in a grid, visualized using Pygame.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/A_star-Algorithm" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">Boston Housing Price Prediction</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">A Linear Regression ML Project focusing on deployment using Render/Heroku, Docker, GitHub Actions, Flask, and a simple HTML interface.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/BostonHousePricing" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card-wrapper w-full h-full flex">
+                    <div class="project-card p-4 flex flex-col justify-between h-full w-full">
+                        <h3 class="font-bold mb-2">MNIST Handwritten Number Detection</h3>
+                        <p class="text-sm text-[var(--color-subtle-text)] mb-4 flex-grow">Training a Neural Network to classify handwritten digits using the popular MNIST Dataset.</p>
+                        <div>
+                            <a href="https://github.com/AliVaghjipur/MNIST" target="_blank" class="text-sm text-[var(--color-subtle-text)] hover:text-[var(--color-text)]">
+                                <i class="fab fa-github mr-1"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="other-info" class="section-container fade-in-on-scroll">
+            <div class="grid md:grid-cols-3 gap-8 items-start">
+                <h2 class="section-title md:col-span-1">Certifications</h2>
+                <div class="md:col-span-2 flex flex-col justify-center">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="font-semibold">The Complete Self Driving Car Course - Applied Deep Learning</h3>
+                            <p class="text-sm text-[var(--color-subtle-text)]">UDEMY</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">AWS Machine Learning Foundations</h3>
+                            <p class="text-sm text-[var(--color-subtle-text)]">UDACITY</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Deep Learning with MATLAB </h3>
+                            <p class="text-sm text-[var(--color-subtle-text)]">Mathworks MATLAB</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Reinforcement with MATLAB </h3>
+                            <p class="text-sm text-[var(--color-subtle-text)]">Mathworks MATLAB</p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Computer Vision with MATLAB </h3>
+                            <p class="text-sm text-[var(--color-subtle-text)]">Mathworks MATLAB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+            <section id="other-info" class="section-container fade-in-on-scroll">
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <h2 class="section-title md:col-span-1">Volunteering</h2>
+                    <div class="md:col-span-2 flex flex-col justify-center">
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-semibold">National Service Scheme (NSS)</h3>
+                                <p class="text-sm text-[var(--color-subtle-text)]">Head Coordinator, Social Worker</p>
+                                <ul class="list-disc pl-5 text-sm text-[var(--color-text)]">
+                                    <li>Lead a team of 70 volunteers, organizing various events for underprivileged children, focussing on their education and overall development.</li>
+                                    <li>Educating people in rural regions, farmers and dairy workers about the various government schemes.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Share A Book India Assosciation (SABIA)</h3>
+                                <p class="text-sm text-[var(--color-subtle-text)]">Volunteer</p>
+                                <ul class="list-disc pl-5 text-sm text-[var(--color-text)]">
+                                    <li>Book donation drives to build libraries in Government Schools in rural areas.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Campus Garten, Germany</h3>
+                                <p class="text-sm text-[var(--color-subtle-text)]">Sustainability Program Volunteer</p>
+                                <ul class="list-disc pl-5 text-sm text-[var(--color-text)]">
+                                    <li>Community gardening at the university campus along with sustainabiliy programs like setting up rain water harvesting, organising clean-up drives and other events and discussions.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section id="contact" class="section-container fade-in-on-scroll text-center">
+                 <h2 class="text-3xl font-bold mb-2">Get In Touch</h2>
+                 <p class="text-lg text-[var(--color-subtle-text)] max-w-lg mx-auto mb-8">I'm currently open to new opportunities and collaborations. Feel free to reach out—I'd love to chat!</p>
+                 <a href="mailto:valizainul@gmail.com" class="inline-block bg-[var(--color-accent-1)] hover:bg-red-500 transition-colors text-white font-bold py-3 px-8 rounded-md">Say Hello</a>
+
+                <!-- Re-added Social Icons -->
+                <div class="mt-8 flex gap-4 justify-center">
+                    <a href="https://github.com/AliVaghjipur" target="_blank" class="text-2xl text-[var(--color-subtle-text)] hover:text-[var(--color-text)] transition-colors"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/alizainul-vaghjipurwala-245030169?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BwPYtJes1SrqpRrvyYYfnpA%3D%3D" target="_blank" class="text-2xl text-[var(--color-subtle-text)] hover:text-[var(--color-text)] transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:valizainul@gmail.com" class="text-2xl text-[var(--color-subtle-text)] hover:text-[var(--color-text)] transition-colors"><i class="fas fa-envelope"></i></a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-sm text-[var(--color-subtle-text)] bg-[var(--color-bg)]">
+        <p> 2025 Alizainul Vaghjipurwala. All rights reserved.</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Custom Cursor Logic ---
+        const cursorDot = document.querySelector("#cursor-dot");
+        const cursorOutline = document.querySelector("#cursor-outline");
+        if (cursorDot && window.matchMedia("(pointer: fine)").matches) {
+            window.addEventListener("mousemove", (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+                cursorOutline.style.left = `${posX}px`;
+                cursorOutline.style.top = `${posY}px`;
+            });
+            document.querySelectorAll("a, button, .carousel-button").forEach(el => {
+                el.addEventListener("mouseover", () => {
+                    cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    cursorOutline.style.borderColor = 'var(--color-accent-2)';
+                });
+                el.addEventListener("mouseout", () => {
+                    cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursorOutline.style.borderColor = 'var(--color-accent-1)';
+                });
+            });
+        }
+
+        // --- Intersection Observer for Scroll Animations ---
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-on-scroll').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // --- Carousel Logic ---
+        const carousel = document.querySelector('.carousel-container');
+        if (carousel) {
+            const slides = carousel.querySelector('.carousel-slides');
+            const prevButton = carousel.querySelector('.prev');
+            const nextButton = carousel.querySelector('.next');
+            const slideCount = slides.children.length;
+            let currentIndex = 0;
+            let autoSlideInterval;
+
+            function goToSlide(index) {
+                currentIndex = (index + slideCount) % slideCount;
+                slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000);
+            }
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                startAutoSlide();
+            }
+            prevButton.addEventListener('click', () => { goToSlide(currentIndex - 1); resetAutoSlide(); });
+            nextButton.addEventListener('click', () => { goToSlide(currentIndex + 1); resetAutoSlide(); });
+            carousel.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+            carousel.addEventListener('mouseleave', startAutoSlide);
+            startAutoSlide();
+        }
+
+        // --- Theme Toggle and Header Scroll Effect ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
+        // Header scroll effect
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for fade-in-on-scroll elements (keep your existing one)
+        const fadeInElements = document.querySelectorAll('.fade-in-on-scroll');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Hamburger menu logic (MOVE THIS INSIDE DOMContentLoaded)
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenu = document.getElementById('close-mobile-menu');
+        const mobileLinks = document.querySelectorAll('#mobile-menu .mobile-link');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        if (hamburgerBtn && mobileMenu) {
+            hamburgerBtn.addEventListener('click', () => {
+                mobileMenu.classList.add('open');
+                mobileMenu.classList.remove('translate-x-full');
+            });
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                mobileMenu.classList.add('translate-x-full');
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    mobileMenu.classList.add('translate-x-full');
+                });
+            });
+            // Sync theme toggle in mobile menu
+            mobileThemeToggle.addEventListener('click', () => {
+                themeToggle.click();
+                mobileThemeToggle.innerHTML = themeToggle.innerHTML;
+            });
+            mobileThemeToggle.innerHTML = themeToggle.innerHTML;
+        }
+    });
+
+    // Three.js Particles (keep this outside DOMContentLoaded)
+    let scene, camera, renderer, particlesMesh;
+    function initParticles() {
+        const canvas = document.getElementById('three-canvas');
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 5;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: getComputedStyle(document.documentElement).getPropertyValue('--color-particles'),
+            transparent: true,
+            opacity: 0.8
+        });
+        particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 2;
+        document.addEventListener('mousemove', (event) => {
+            particlesMesh.rotation.x = event.clientY * 0.0002;
+            particlesMesh.rotation.y = event.clientX * 0.0002;
+        });
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    }
+    window.addEventListener('load', initParticles);
+
+    
+    </script>
+</body>
+</html>
